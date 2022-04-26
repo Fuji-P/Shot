@@ -165,25 +165,28 @@ void ENEMY::Draw()
 
 	//弾から最初に描画
 	for (int i = 0; i < ENEMY_SNUM; ++i) {
-		if (shot[i].flag) {
-			if (stype == 0 || stype == 2) {
-				DrawGraph(shot[i].x - shot[i].width / 2, shot[i].y - shot[i].height / 2, shot[i].gh, true);
-			}
-			else {
-				DrawRotaGraph(shot[i].x, shot[i].y, 1.0, shot[i].rad + (90 * M_PI / 180), shot[i].gh, true);
-			}
+//		if (shot[i].flag) {
+		if (!shot[i].flag) {
+			continue;
+		}
+		if (stype == 0 || stype == 2) {
+			DrawGraph(shot[i].x - shot[i].width / 2, shot[i].y - shot[i].height / 2, shot[i].gh, true);
+		}
+		else {
+			DrawRotaGraph(shot[i].x, shot[i].y, 1.0, shot[i].rad + (90 * M_PI / 180), shot[i].gh, true);
 		}
 	}
 
-	if (!endflag) {
-
-//		temp = count % 40 / 10;
-		temp = count % 120 / 30;
-		if (temp == 3)
-			temp = 1;
-
-		DrawGraph(x - width / 2, y - height / 2, gh[temp], TRUE);
+//	if (!endflag) {
+	if (deadflag) {
+		return;
 	}
+//	temp = count % 40 / 10;
+	temp = count % 120 / 30;
+	if (temp == 3) {
+		temp = 1;
+	}
+	DrawGraph(x - width / 2, y - height / 2, gh[temp], TRUE);
 }
 
 void ENEMY::Shot()
@@ -205,6 +208,7 @@ void ENEMY::Shot()
 	//ショット音フラグを戻す
 	s_shot = false;
 
+
 	//プレイヤーの一取得
 	control.GetPlayerPosition(&px, &py);
 
@@ -218,6 +222,10 @@ void ENEMY::Shot()
 
 		//前方にショット
 		case 0:
+			//敵が生きてるときだけ発射する。
+			if (deadflag) {
+				break;
+			}
 			//5ループに一回発射。20までなので5発発射。
 //			if (scount % 5 == 0 && scount <= 20) {
 			if (scount % 10 == 0 && scount <= 40) {
@@ -238,6 +246,10 @@ void ENEMY::Shot()
 
 		//プレイヤーに向かって直線ショット
 		case 1:
+			//敵が生きてるときだけ発射する。
+			if (deadflag) {
+				break;
+			}
 			//6ループに一回発射。54までなので10発発射。
 //			if (scount % 6 == 0 && scount <= 54) {
 			if (scount % 12 == 0 && scount <= 108) {
@@ -258,6 +270,10 @@ void ENEMY::Shot()
 
 		//3直線ショット
 		case 2:
+			//敵が生きてるときだけ発射する。
+			if (deadflag) {
+				break;
+			}
 			//10ループに一回発射。1ループに3発なので5ループさせると１５発発射
 //			if (scount % 10 == 0 && scount <= 40) {
 			if (scount % 20 == 0 && scount <= 80) {
@@ -270,7 +286,6 @@ void ENEMY::Shot()
 
 						//0の時は左より
 						if (num == 0) {
-
 							//敵とプレイヤーとの逆正接から10度引いたラジアンを代入
 							shot[i].rad = rad - (10 * 3.14 / 180);
 						}
@@ -300,6 +315,10 @@ void ENEMY::Shot()
 
 		//乱射ショット
 		case 3:
+			//敵が生きてるときだけ発射する。
+			if (deadflag) {
+				break;
+			}
 			//1ループ毎に1発発射
 			for (int i = 0; i < ENEMY_SNUM; ++i) {
 				if (num >= ENEMY_SNUM) {
@@ -331,38 +350,38 @@ void ENEMY::Shot()
 
 	//フラグ立ってる弾だけ、弾の移動を行う
 	for (int i = 0; i < ENEMY_SNUM; ++i) {
-		if (shot[i].flag) {
-
-			switch (shot[i].pattern) {
-
-				//単純に下に発射
-				case 0:
-					shot[i].y += shot[i].speed;
-					break;
-
-				case 1:
-					shot[i].x += shot[i].speed * cos(shot[i].rad);
-					shot[i].y += shot[i].speed * sin(shot[i].rad);
-					break;
-
-				case 2:
-					shot[i].x += shot[i].speed * cos(shot[i].rad);
-					shot[i].y += shot[i].speed * sin(shot[i].rad);
-					break;
-
-				case 3:
-					shot[i].x += shot[i].speed * cos(shot[i].rad);
-					shot[i].y += shot[i].speed * sin(shot[i].rad);
-					break;
-			}
-
-			//弾が画面をはみ出たらフラグを戻す。
-			if (ShotOutCheck(i)) {
-				shot[i].flag = false;
-				continue;
-			}
-			++s;
+//		if (shot[i].flag) {
+		if (!shot[i].flag) {
+			continue;
 		}
+		switch (shot[i].pattern) {
+			//単純に下に発射
+			case 0:
+				shot[i].y += shot[i].speed;
+				break;
+
+			case 1:
+				shot[i].x += shot[i].speed * cos(shot[i].rad);
+				shot[i].y += shot[i].speed * sin(shot[i].rad);
+				break;
+
+			case 2:
+				shot[i].x += shot[i].speed * cos(shot[i].rad);
+				shot[i].y += shot[i].speed * sin(shot[i].rad);
+				break;
+
+			case 3:
+				shot[i].x += shot[i].speed * cos(shot[i].rad);
+				shot[i].y += shot[i].speed * sin(shot[i].rad);
+				break;
+		}
+
+		//弾が画面をはみ出たらフラグを戻す。
+		if (ShotOutCheck(i)) {
+			shot[i].flag = false;
+			continue;
+		}
+		++s;
 	}
 
 	//sがゼロということは発射中の弾がない。
@@ -373,6 +392,18 @@ void ENEMY::Shot()
 	}
 
 	++scount;
+}
+
+void ENEMY::GetPosition(double* x, double* y)
+{
+	*x = this->x;
+	*y = this->y;
+
+}
+
+void ENEMY::SetDeadFlag()
+{
+	deadflag = true;
 }
 
 bool ENEMY::All()
@@ -401,7 +432,7 @@ bool ENEMY::OutCheck()
 bool ENEMY::ShotOutCheck(int i)
 {
 	//弾が画面をはみ出たらフラグを戻す。
-	if (shot[i].x < -20 || shot[i].x>420 || shot[i].y < -20 || shot[i].y>500) {
+	if (shot[i].x < -20 || shot[i].x > 420 || shot[i].y < -20 || shot[i].y > 500) {
 		return true;
 	}
 	else {
@@ -409,14 +440,12 @@ bool ENEMY::ShotOutCheck(int i)
 	}
 }
 
-void ENEMY::GetPosition(double* x, double* y)
-{
-	*x = this->x;
-	*y = this->y;
-
-}
-
 bool ENEMY::GetShotSound()
 {
 	return s_shot;
+}
+
+bool ENEMY::GetDeadFlag()
+{
+	return deadflag;
 }

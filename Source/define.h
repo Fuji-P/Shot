@@ -34,6 +34,15 @@
 
 #define ENEMY_ANUM 13
 
+//当たり判定用半径定義
+#define PLAYER_COLLISION 6
+#define ENEMY1_COLLISION 14
+
+#define PSHOT_COLLISION 3
+#define ESHOT1_COLLISION 12
+#define ESHOT2_COLLISION 3
+#define ESHOT3_COLLISION 2
+
 //extern宣言してどこからでもアクセスできるようにする
 //key配列
 extern char key[256];

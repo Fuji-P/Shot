@@ -153,7 +153,7 @@ void PLAYER::Move()
 		if(ycount > 0) {
 			iy += 6;
 			result = iy;
-		} else if(ycount<0) {
+		} else if(ycount < 0) {
 			//１行目の先頭添字番号は０なので何もする必要なし。(分かりやすくするために書いときました)
 			iy += 0;
 			result = iy;
@@ -179,28 +179,29 @@ void PLAYER::Shot()
 	//キーが押されててかつ、6ループに一回発射
 //	if (key[KEY_INPUT_Z] == 1 && count % 6 == 0) {
 	if (key[KEY_INPUT_Z] == 1 && count % 12 == 0) {
-	for (int i = 0; i < PSHOT_NUM; ++i) {
+		for (int i = 0; i < PSHOT_NUM; ++i) {
 			if (shot[i].flag == false) {
 				shot[i].flag = true;
 				shot[i].x = x;
 				shot[i].y = y;
 				break;
 			}
+			//ショットサウンドフラグを立てる
+			s_shot = true;
 		}
-		//ショットサウンドフラグを立てる
-		s_shot = true;
 	}
 
 	//弾を移動させる処理
 	for (int i = 0; i < PSHOT_NUM; ++i) {
 		//発射してる弾だけ
-		if (shot[i].flag) {
-			shot[i].y -= PSHOT_SPEED;
-
-			//画面の外にはみ出したらフラグを戻す
-			if (shot[i].y < -10) {
-				shot[i].flag = false;
-			}
+//		if (shot[i].flag) {
+		if (!shot[i].flag) {
+			continue;
+		}
+		shot[i].y -= PSHOT_SPEED;
+		//画面の外にはみ出したらフラグを戻す
+		if (shot[i].y < -10) {
+			shot[i].flag = false;
 		}
 	}
 }
@@ -209,18 +210,25 @@ void PLAYER::Draw()
 {
 	//弾描画
 	for (int i = 0; i < PSHOT_NUM; ++i) {
-		if (shot[i].flag) {
-			DrawGraph(shot[i].x - shot[i].width / 2,
-						shot[i].y - shot[i].height / 2,
-						shot[i].gh, TRUE);
+//		if (shot[i].flag) {
+		if (!shot[i].flag) {
+			continue;
 		}
+		DrawGraph(
+					shot[i].x - shot[i].width / 2,
+					shot[i].y - shot[i].height / 2,
+					shot[i].gh,
+					TRUE
+				);
 	}
 
 	//生きてれば描画
-	if(life) {
-		//描画
-		DrawGraph(x - width / 2, y - height / 2, gh[result], TRUE);
+//	if (life) {
+	if (!life) {
+		return;
 	}
+	//描画
+	DrawGraph(x - width / 2, y - height / 2, gh[result], TRUE);
 }
 
 void PLAYER::All()
@@ -238,7 +246,29 @@ void PLAYER::GetPosition(double* x, double* y)
 	*y = this->y;
 }
 
+void PLAYER::SetShotFlag(int index, bool flag)
+{
+	shot[index].flag = flag;
+}
+
 bool PLAYER::GetShotSound()
 {
 	return s_shot;
+}
+
+bool PLAYER::GetShotPosition(
+								int		index,
+								double*	x,
+								double*	y
+							)
+{
+	if (shot[index].flag) {
+		*x = shot[index].x;
+		*y = shot[index].y;
+		return true;
+	}
+	else {
+		return false;
+	}
+
 }

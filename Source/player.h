@@ -45,5 +45,10 @@ public:
 	bool GetShotSound();
 	void GetPosition(double* x, double* y);
 	void All();
-
+	void SetShotFlag(int index, bool flag);
+	bool GetShotPosition(
+							int		index,
+							double*	x,
+							double*	y
+						);
 };

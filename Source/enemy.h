@@ -64,6 +64,8 @@ private:
 public:
 	bool All();
 	bool GetShotSound();
+	bool GetDeadFlag();
+	void SetDeadFlag();
 	void GetPosition(double* x, double* y);
 	ENEMY(
 			int type,

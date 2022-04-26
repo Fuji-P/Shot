@@ -33,33 +33,62 @@ CONTROL::CONTROL()
 			c = fgetc(fp);
 
 			//末尾ならループを抜ける。
-			if (c == EOF)
+			if (c == EOF) {
 				goto out;
+			}
 
 			//カンマか改行でなければ、文字としてつなげる
-			if (c != ',' && c != '\n')
+			if (c != ',' && c != '\n') {
 				strcat(buf, (const char*)&c);
+			}
 			//カンマか改行ならループ抜ける。
-			else
+			else {
 				break;
+			}
 		}
 		//ここに来たということは、1セル分の文字列が出来上がったということ
 		switch (col) {
 			//1列目は敵種類を表す。atoi関数で数値として代入。
-		case 1:	data[row].type = atoi(buf); break;
+			case 1:	
+				data[row].type = atoi(buf);
+				break;
 			//2列目は弾種類。以降省略。
-		case 2: data[row].stype = atoi(buf); break;
-		case 3: data[row].m_pattern = atoi(buf); break;
-		case 4: data[row].s_pattern = atoi(buf); break;
-		case 5: data[row].in_time = atoi(buf); break;
-		case 6: data[row].stop_time = atoi(buf); break;
-		case 7: data[row].shot_time = atoi(buf); break;
-		case 8: data[row].out_time = atoi(buf); break;
-		case 9: data[row].x = atoi(buf); break;
-		case 10: data[row].y = atoi(buf); break;
-		case 11: data[row].speed = atoi(buf); break;
-		case 12: data[row].hp = atoi(buf); break;
-		case 13: data[row].item = atoi(buf); break;
+			case 2:
+				data[row].stype = atoi(buf);
+				break;
+			case 3:
+				data[row].m_pattern = atoi(buf);
+				break;
+			case 4:
+				data[row].s_pattern = atoi(buf);
+				break;
+			case 5:
+				data[row].in_time = atoi(buf);
+				break;
+			case 6:
+				data[row].stop_time = atoi(buf);
+				break;
+			case 7:
+				data[row].shot_time = atoi(buf);
+				break;
+			case 8:
+				data[row].out_time = atoi(buf);
+				break;
+			case 9:
+				data[row].x = atoi(buf);
+				break;
+			case 10:
+				data[row].y = atoi(buf);
+				break;
+			case 11:
+				data[row].speed = atoi(buf);
+				break;
+			case 12:
+				data[row].hp = atoi(buf);
+				break;
+			case 13:
+				data[row].item = atoi(buf);
+				break;
 		}
 		//バッファを初期化
 		memset(buf, 0, sizeof(buf));
@@ -94,9 +123,11 @@ out:
 	}
 
 	//サウンドファイル読み込み
+	s_edead = LoadSoundMem("enemydead.wav");
 	s_eshot = LoadSoundMem("enemyshot.wav");
 	s_pshot = LoadSoundMem("playershot.wav");
 
+	edead_flag = false;
 	eshot_flag = false;
 	pshot_flag = false;
 }
@@ -119,7 +150,7 @@ void CONTROL::All()
 {
 
 	//サウンドフラグを初期化
-	eshot_flag = pshot_flag = false;
+	edead_flag = eshot_flag = pshot_flag = false;
 
 	//描画領域を指定
 	SetDrawArea(MARGIN, MARGIN, MARGIN + 380, MARGIN + 460);
@@ -135,18 +166,22 @@ void CONTROL::All()
 	}
 
 	for (int i = 0; i < ENEMY_NUM; ++i) {
-		if (enemy[i] != NULL) {
-			//敵ショットサウンドフラグチェック
-			if (enemy[i]->GetShotSound()) {
-				eshot_flag = true;
-			}
-
-			if (enemy[i]->All()) {
-				delete enemy[i];
-				enemy[i] = NULL;
-			}
+//		if (enemy[i] != NULL) {
+		if (enemy[i] == NULL) {
+			continue;
+		}
+		//敵ショットサウンドフラグチェック
+		if (enemy[i]->GetShotSound()) {
+			eshot_flag = true;
+		}
+		if (enemy[i]->All()) {
+			delete enemy[i];
+			enemy[i] = NULL;
 		}
 	}
+
+	//当たり判定
+	CollisionAll();
 	SoundAll();
 	++g_count;
 }
@@ -160,6 +195,10 @@ void CONTROL::SoundAll()
 
 	if (eshot_flag) {
 		PlaySoundMem(s_eshot, DX_PLAYTYPE_BACK);
+	}
+
+	if (edead_flag) {
+		PlaySoundMem(s_edead, DX_PLAYTYPE_BACK);
 	}
 
 }
@@ -183,4 +222,57 @@ void CONTROL::GetEnemyPosition(int index, double* x, double* y)
 	//代入
 	*x = tempx;
 	*y = tempy;
+}
+
+void CONTROL::CollisionAll()
+{
+	double px, py, ex, ey;
+	//操作キャラの弾と敵との当たり判定
+	for (int i = 0; i < PSHOT_NUM; ++i) {
+//		if (player->GetShotPosition(i, &px, &py)) {
+		if (!player->GetShotPosition(i, &px, &py)) {
+			continue;
+		}
+		for (int s = 0; s < ENEMY_NUM; ++s) {
+			//敵クラスのポインタがNULLじゃない、かつdeadflagがfalse(死んでない＆帰還してない)
+//			if (enemy[s] != NULL && !enemy[s]->GetDeadFlag()) {
+			if (enemy[s] == NULL || enemy[s]->GetDeadFlag()) {
+				continue;
+			}
+			enemy[s]->GetPosition(&ex, &ey);
+			//当たり判定
+//			if (CircleCollision(PSHOT_COLLISION, ENEMY1_COLLISION, px, ex, py, ey)) {
+			if (!CircleCollision(PSHOT_COLLISION, ENEMY1_COLLISION, px, ex, py, ey)) {
+				continue;
+			}
+			//当たっていれば、deadflagを立てる
+			enemy[s]->SetDeadFlag();
+			//当たった弾のフラグを戻す
+			player->SetShotFlag(i, false);
+			//敵消滅音フラグセット
+			edead_flag = true;
+		}
+	}
+}
+
+bool CONTROL::CircleCollision(
+								double c1,
+								double c2,
+								double cx1,
+								double cx2,
+								double cy1,
+								double cy2
+							)
+{
+
+	double hlength = c1 + c2;
+	double xlength = cx1 - cx2;
+	double ylength = cy1 - cy2;
+
+	if (hlength * hlength >= xlength * xlength + ylength * ylength) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }
