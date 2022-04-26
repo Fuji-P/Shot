@@ -3,6 +3,9 @@
 * リンク	：https://bituse.info/
 */
 
+#ifndef _ENEMY
+#define _ENEMY
+
 class ENEMY {
 private:
 	//座標とグラフィックハンドル
@@ -27,6 +30,15 @@ private:
 	//敵が出現してからのカウント
 	int count;
 
+	//HP
+	int hp;
+	//アイテム
+	int item;
+
+	//発射した弾数
+	int num;
+	//発射直後のラジアン
+	double rad;
 
 	//敵消滅フラグ
 	bool deadflag;
@@ -40,12 +52,16 @@ private:
 	//ショットが打てるようになってからのカウント
 	int scount;
 
-	//HP
-	int hp;
-	//アイテム
-	int item;
+private:
+	void Move();
+	void Shot();
+	void Draw();
+	bool OutCheck();
+	bool ShotOutCheck(int i);
 
 public:
+	bool All();
+	void GetPosition(double* x, double* y);
 	ENEMY(
 			int type,
 			int stype,
@@ -61,15 +77,6 @@ public:
 			int hp,
 			int item
 		);
-
-	void Move();
-
-	void Shot();
-
-	void Draw();
-
-	bool All();
-
-	bool OutCheck();
-
 };
+
+#endif

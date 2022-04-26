@@ -128,3 +128,24 @@ void CONTROL::All()
 	}
 	++g_count;
 }
+
+void CONTROL::GetPlayerPosition(double* x, double* y)
+{
+	double tempx, tempy;
+
+	player->GetPosition(&tempx, &tempy);
+
+	*x = tempx;
+	*y = tempy;
+}
+
+void CONTROL::GetEnemyPosition(int index, double* x, double* y)
+{
+	double tempx, tempy;
+	//Žw’è‚µ‚½“YŽš‚Ì“G‚ÌÀ•W‚ðŽæ“¾
+	enemy[index]->GetPosition(&tempx, &tempy);
+
+	//‘ã“ü
+	*x = tempx;
+	*y = tempy;
+}

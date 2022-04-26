@@ -200,7 +200,6 @@ void PLAYER::Shot()
 	}
 }
 
-
 void PLAYER::Draw()
 {
 	//’e•`‰æ
@@ -219,7 +218,6 @@ void PLAYER::Draw()
 	}
 }
 
-
 void PLAYER::All()
 {
 	Move();
@@ -227,4 +225,10 @@ void PLAYER::All()
 	Draw();
 
 	++count;
+}
+
+void PLAYER::GetPosition(double* x, double* y)
+{
+	*x = this->x;
+	*y = this->y;
 }

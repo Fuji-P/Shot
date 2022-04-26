@@ -3,7 +3,11 @@
 * リンク	：https://bituse.info/
 */
 
+#define _USE_MATH_DEFINES
+
 #include <windows.h>
+#include <math.h>
+#include <time.h>
 
 //プレイヤーの歩くスピード
 #define PLAYER_SPEED 4
@@ -24,9 +28,9 @@
 //弾の速度
 #define PSHOT_SPEED 7
 
-#define ENEMY_SNUM 50
+#define ENEMY_SNUM 25
 
-#define ENEMY_NUM 5
+#define ENEMY_NUM 4
 
 #define ENEMY_ANUM 13
 
@@ -49,6 +53,7 @@ struct E_SHOT {
 	bool	flag;			//弾が発射中かどうか
 	double	x;				//x座標
 	double	y;				//y座標
+	double	rad;			//角度(ラジアン)
 	int		gh;				//グラフィックハンドル
 	int		width, height;	//画像の幅と高さ
 	int		pattern;		//ショットパターン

@@ -40,6 +40,7 @@ private:
 
 public:
 	PLAYER();
+	void GetPosition(double* x, double* y);
 	void All();
 
 };
