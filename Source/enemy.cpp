@@ -8,20 +8,20 @@
 #include "control.h"
 
 ENEMY::ENEMY(
-				int type,
-				int stype,
-				int m_pattern,
-				int s_pattern,
-				int in_time,
-				int stop_time,
-				int shot_time,
-				int out_time,
-				int x,
-				int y,
-				int speed,
-				int hp,
-				int item
-			)
+	int type,
+	int stype,
+	int m_pattern,
+	int s_pattern,
+	int in_time,
+	int stop_time,
+	int shot_time,
+	int out_time,
+	int x,
+	int y,
+	int speed,
+	int hp,
+	int item
+)
 {
 
 	//サイズ
@@ -165,7 +165,6 @@ void ENEMY::Draw()
 
 	//弾から最初に描画
 	for (int i = 0; i < ENEMY_SNUM; ++i) {
-//		if (shot[i].flag) {
 		if (!shot[i].flag) {
 			continue;
 		}
@@ -177,7 +176,6 @@ void ENEMY::Draw()
 		}
 	}
 
-//	if (!endflag) {
 	if (deadflag) {
 		return;
 	}
@@ -208,124 +206,130 @@ void ENEMY::Shot()
 	//ショット音フラグを戻す
 	s_shot = false;
 
+	//敵が生きてるときだけ発射する。
+	if (!deadflag) {
+		//プレイヤーの一取得
+		control.GetPlayerPosition(&px, &py);
 
-	//プレイヤーの一取得
-	control.GetPlayerPosition(&px, &py);
+		//敵とプレイヤーとの座標の差から逆正接を求める。
+		//初回だけ実行
+		if (scount == 0) {
+			rad = atan2(py - y, px - x);
+		}
 
-	//敵とプレイヤーとの座標の差から逆正接を求める。
-	//初回だけ実行
-	if (scount == 0) {
-		rad = atan2(py - y, px - x);
-	}
+		switch (s_pattern) {
 
-	switch (s_pattern) {
-
-		//前方にショット
-		case 0:
-			//敵が生きてるときだけ発射する。
-			if (deadflag) {
-				break;
-			}
-			//5ループに一回発射。20までなので5発発射。
-//			if (scount % 5 == 0 && scount <= 20) {
-			if (scount % 10 == 0 && scount <= 40) {
-				for (int i = 0; i < ENEMY_SNUM; ++i) {
-					//フラグが立ってない弾を探して、座標等をセット
-					if (shot[i].flag == false) {
-						shot[i].flag = true;
-						shot[i].x = x;
-						shot[i].y = y;
-						shot[i].rad = rad;
-						break;
-					}
-				}
-				//ショットサウンドフラグを立てる
-				s_shot = true;
-			}
-			break;
-
-		//プレイヤーに向かって直線ショット
-		case 1:
-			//敵が生きてるときだけ発射する。
-			if (deadflag) {
-				break;
-			}
-			//6ループに一回発射。54までなので10発発射。
-//			if (scount % 6 == 0 && scount <= 54) {
-			if (scount % 12 == 0 && scount <= 108) {
-				for (int i = 0; i < ENEMY_SNUM; ++i) {
-					//フラグが立ってない弾を探して、座標等をセット
-					if (shot[i].flag == false) {
-						shot[i].flag = true;
-						shot[i].x = x;
-						shot[i].y = y;
-						shot[i].rad = rad;
-						break;
-					}
-				}
-				//ショットサウンドフラグを立てる
-				s_shot = true;
-			}
-			break;
-
-		//3直線ショット
-		case 2:
-			//敵が生きてるときだけ発射する。
-			if (deadflag) {
-				break;
-			}
-			//10ループに一回発射。1ループに3発なので5ループさせると１５発発射
-//			if (scount % 10 == 0 && scount <= 40) {
-			if (scount % 20 == 0 && scount <= 80) {
-				for (int i = 0; i < ENEMY_SNUM; ++i) {
-					//フラグが立ってない弾を探して、座標等をセット
-					if (shot[i].flag == false) {
-						shot[i].flag = true;
-						shot[i].x = x;
-						shot[i].y = y;
-
-						//0の時は左より
-						if (num == 0) {
-							//敵とプレイヤーとの逆正接から10度引いたラジアンを代入
-							shot[i].rad = rad - (10 * 3.14 / 180);
-						}
-						//1の時はプレイヤー一直線
-						else if (num == 1) {
-							//敵とプレイヤーとの逆正接を代入
-							shot[i].rad = rad;
-						}
-						//2の時は右より
-						else if (num == 2) {
-							//敵とプレイヤーとの逆正接から10度足したラジアンを代入
-							shot[i].rad = rad + (10 * M_PI / 180);
-						}
-						++num;
-
-						//3発発射したら,numを0にしてループを抜ける。
-						if (num == 3) {
-							num = 0;
-							break;
-						}
-					}
-				}
-				//ショットサウンドフラグを立てる
-				s_shot = true;
-			}
-			break;
-
-		//乱射ショット
-		case 3:
-			//敵が生きてるときだけ発射する。
-			if (deadflag) {
-				break;
-			}
-			//1ループ毎に1発発射
-			for (int i = 0; i < ENEMY_SNUM; ++i) {
-				if (num >= ENEMY_SNUM) {
+			//前方にショット
+			case 0:
+				//5ループに一回発射。20までなので5発発射。
+//				if (scount % 5 == 0 && scount <= 20) {
+//				if (scount % 10 == 0 && scount <= 40) {
+				if (scount % 10 != 0 || scount > 40) {
 					break;
 				}
-				//フラグが立ってない弾を探して、座標等をセット
-				if (shot[i].flag == false) {
+				for (int i = 0; i < ENEMY_SNUM; ++i) {
+					//フラグが立ってない弾を探して、座標等をセット
+//					if (shot[i].flag == false) {
+					if (shot[i].flag) {
+						continue;
+					}
+					shot[i].flag = true;
+					shot[i].x = x;
+					shot[i].y = y;
+					shot[i].rad = rad;
+					break;
+				}
+				//ショットサウンドフラグを立てる
+				s_shot = true;
+				break;
+
+			//プレイヤーに向かって直線ショット
+			case 1:
+			//6ループに一回発射。54までなので10発発射。
+//				if (scount % 6 == 0 && scount <= 54) {
+//				if (scount % 12 == 0 && scount <= 108) {
+				if (scount % 12 != 0 || scount > 108) {
+					break;
+				}
+				for (int i = 0; i < ENEMY_SNUM; ++i) {
+					//フラグが立ってない弾を探して、座標等をセット
+//					if (shot[i].flag == false) {
+					if (shot[i].flag) {
+						continue;
+					}
+					shot[i].flag = true;
+					shot[i].x = x;
+					shot[i].y = y;
+					shot[i].rad = rad;
+					break;
+				}
+				//ショットサウンドフラグを立てる
+				s_shot = true;
+				break;
+
+			//3直線ショット
+			case 2:
+				//10ループに一回発射。1ループに3発なので5ループさせると１５発発射
+//				if (scount % 10 == 0 && scount <= 40) {
+//				if (scount % 20 == 0 && scount <= 80) {
+				if (scount % 20 != 0 || scount > 80) {
+					break;
+				}
+				for (int i = 0; i < ENEMY_SNUM; ++i) {
+					//フラグが立ってない弾を探して、座標等をセット
+//					if (shot[i].flag == false) {
+					if (shot[i].flag) {
+						continue;
+					}
+					shot[i].flag = true;
+					shot[i].x = x;
+					shot[i].y = y;
+
+					//0の時は左より
+					if (num == 0) {
+						//敵とプレイヤーとの逆正接から10度引いたラジアンを代入
+						shot[i].rad = rad - (10 * 3.14 / 180);
+					}
+					//1の時はプレイヤー一直線
+					else if (num == 1) {
+						//敵とプレイヤーとの逆正接を代入
+						shot[i].rad = rad;
+					}
+					//2の時は右より
+					else if (num == 2) {
+						//敵とプレイヤーとの逆正接から10度足したラジアンを代入
+						shot[i].rad = rad + (10 * M_PI / 180);
+					}
+					++num;
+
+					//3発発射したら,numを0にしてループを抜ける。
+					if (num == 3) {
+						num = 0;
+						break;
+					}
+				}
+				//ショットサウンドフラグを立てる
+				s_shot = true;
+				break;
+
+			//乱射ショット
+			case 3:
+				//10ループに一回発射。42までなので15発発射。
+//				if (scount % 3 == 0 && scount <= 42) {
+//				if (scount % 6 == 0 && scount <= 84) {
+				if (scount % 6 != 0 || scount > 84) {
+					break;
+				}
+
+				//1ループ毎に1発発射
+				for (int i = 0; i < ENEMY_SNUM; ++i) {
+
+					//フラグが立ってない弾を探して、座標等をセット
+//					if (shot[i].flag == false) {
+					if (shot[i].flag) {
+						continue;
+					}
+
 					shot[i].flag = true;
 					shot[i].x = x;
 					shot[i].y = y;
@@ -341,8 +345,8 @@ void ENEMY::Shot()
 				}
 				//ショットサウンドフラグを立てる
 				s_shot = true;
-			}
-			break;
+				break;
+		}
 	}
 
 	//フラグが立ってる弾の数
@@ -394,7 +398,10 @@ void ENEMY::Shot()
 	++scount;
 }
 
-void ENEMY::GetPosition(double* x, double* y)
+void ENEMY::GetPosition(
+	double* x,
+	double* y
+)
 {
 	*x = this->x;
 	*y = this->y;
@@ -406,7 +413,10 @@ void ENEMY::SetDeadFlag()
 	deadflag = true;
 }
 
-void ENEMY::SetShotFlag(int index, bool flag)
+void ENEMY::SetShotFlag(
+	int		index,
+	bool	flag
+)
 {
 	shot[index].flag = flag;
 }
@@ -439,7 +449,9 @@ bool ENEMY::OutCheck()
 	}
 }
 
-bool ENEMY::ShotOutCheck(int i)
+bool ENEMY::ShotOutCheck(
+	int i
+)
 {
 	//弾が画面をはみ出たらフラグを戻す。
 	if (shot[i].x < -20 || shot[i].x > 420 || shot[i].y < -20 || shot[i].y > 500) {
@@ -460,7 +472,11 @@ bool ENEMY::GetDeadFlag()
 	return deadflag;
 }
 
-bool ENEMY::GetShotPosition(int index, double* x, double* y)
+bool ENEMY::GetShotPosition(
+	int		index,
+	double*	x,
+	double*	y
+)
 {
 	if (shot[index].flag) {
 		*x = shot[index].x;

@@ -111,19 +111,19 @@ out:
 	//敵クラス生成
 	for (int i = 0; i < ENEMY_NUM; ++i) {
 		enemy[i] = new ENEMY(
-								data[i].type,
-								data[i].stype,
-								data[i].m_pattern,
-								data[i].s_pattern,
-								data[i].in_time,
-								data[i].stop_time,
-								data[i].shot_time,
-								data[i].out_time,
-								data[i].x,
-								data[i].y,
-								data[i].speed,
-								data[i].hp,
-								data[i].item
+							data[i].type,
+							data[i].stype,
+							data[i].m_pattern,
+							data[i].s_pattern,
+							data[i].in_time,
+							data[i].stop_time,
+							data[i].shot_time,
+							data[i].out_time,
+							data[i].x,
+							data[i].y,
+							data[i].speed,
+							data[i].hp,
+							data[i].item
 							);
 	}
 
@@ -180,7 +180,6 @@ void CONTROL::All()
 	}
 
 	for (int i = 0; i < ENEMY_NUM; ++i) {
-//		if (enemy[i] != NULL) {
 		if (enemy[i] == NULL) {
 			continue;
 		}
@@ -208,7 +207,10 @@ void CONTROL::All()
 	++g_count;
 }
 
-void CONTROL::EnemyDeadEffect(double x, double y)
+void CONTROL::EnemyDeadEffect(
+	double x,
+	double y
+)
 {
 	//エフェクトセット
 	for (int z = 0; z < EFFECT_EDEADNUM; ++z) {
@@ -240,7 +242,10 @@ void CONTROL::SoundAll()
 
 }
 
-void CONTROL::GetPlayerPosition(double* x, double* y)
+void CONTROL::GetPlayerPosition(
+	double* x,
+	double* y
+)
 {
 	double tempx, tempy;
 
@@ -250,7 +255,11 @@ void CONTROL::GetPlayerPosition(double* x, double* y)
 	*y = tempy;
 }
 
-void CONTROL::GetEnemyPosition(int index, double* x, double* y)
+void CONTROL::GetEnemyPosition(
+	int index,
+	double* x,
+	double* y
+)
 {
 	double tempx, tempy;
 	//指定した添字の敵の座標を取得
@@ -268,19 +277,16 @@ void CONTROL::CollisionAll()
 
 	//操作キャラの弾と敵との当たり判定
 	for (int i = 0; i < PSHOT_NUM; ++i) {
-//		if (player->GetShotPosition(i, &px, &py)) {
 		if (!player->GetShotPosition(i, &px, &py)) {
 			continue;
 		}
 		for (int s = 0; s < ENEMY_NUM; ++s) {
 			//敵クラスのポインタがNULLじゃない、かつdeadflagがfalse(死んでない＆帰還してない)
-//			if (enemy[s] != NULL && !enemy[s]->GetDeadFlag()) {
 			if (enemy[s] == NULL || enemy[s]->GetDeadFlag()) {
 				continue;
 			}
 			enemy[s]->GetPosition(&ex, &ey);
 			//当たり判定
-//			if (CircleCollision(PSHOT_COLLISION, ENEMY1_COLLISION, px, ex, py, ey)) {
 			if (!CircleCollision(PSHOT_COLLISION, ENEMY1_COLLISION, px, ex, py, ey)) {
 				continue;
 			}
@@ -297,19 +303,16 @@ void CONTROL::CollisionAll()
 
 	//敵の弾と操作キャラとの当たり判定
 	//プレイヤーが生きてれば
-//	if (!player->GetDamageFlag()) {
 	if (player->GetDamageFlag()) {
 		return;
 	}
 	player->GetPosition(&px, &py);
 	for (int i = 0; i < ENEMY_NUM; ++i) {
-//		if (enemy[i] != NULL) {
 		if (enemy[i] == NULL) {
 			continue;
 		}
 		for (int s = 0; s < ENEMY_SNUM; ++s) {
 			//弾フラグが立っていればtrueを返す
-//			if (enemy[i]->GetShotPosition(s, &ex, &ey)) {
 			if (!enemy[i]->GetShotPosition(s, &ex, &ey)) {
 				continue;
 			}
@@ -336,7 +339,6 @@ void CONTROL::CollisionAll()
 					break;
 			}
 
-//			if (tempflag) {
 			if (!tempflag) {
 				continue;
 			}
@@ -353,13 +355,13 @@ void CONTROL::CollisionAll()
 }
 
 bool CONTROL::CircleCollision(
-								double c1,
-								double c2,
-								double cx1,
-								double cx2,
-								double cy1,
-								double cy2
-							)
+	double c1,
+	double c2,
+	double cx1,
+	double cx2,
+	double cy1,
+	double cy2
+)
 {
 
 	double hlength = c1 + c2;

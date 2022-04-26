@@ -182,12 +182,13 @@ void PLAYER::Shot()
 //		if (key[KEY_INPUT_Z] == 1 && count % 6 == 0) {
 		if (key[KEY_INPUT_Z] == 1 && count % 12 == 0) {
 			for (int i = 0; i < PSHOT_NUM; ++i) {
-				if (shot[i].flag == false) {
-					shot[i].flag = true;
-					shot[i].x = x;
-					shot[i].y = y;
-					break;
+				if (shot[i].flag) {
+					continue;
 				}
+				shot[i].flag = true;
+				shot[i].x = x;
+				shot[i].y = y;
+				break;
 				//ƒVƒ‡ƒbƒgƒTƒEƒ“ƒhƒtƒ‰ƒO‚ð—§‚Ä‚é
 				s_shot = true;
 			}
@@ -197,7 +198,6 @@ void PLAYER::Shot()
 	//’e‚ðˆÚ“®‚³‚¹‚éˆ—
 	for (int i = 0; i < PSHOT_NUM; ++i) {
 		//”­ŽË‚µ‚Ä‚é’e‚¾‚¯
-//		if (shot[i].flag) {
 		if (!shot[i].flag) {
 			continue;
 		}
@@ -213,43 +213,47 @@ void PLAYER::Draw()
 {
 	//’e•`‰æ
 	for (int i = 0; i < PSHOT_NUM; ++i) {
-//		if (shot[i].flag) {
 		if (!shot[i].flag) {
 			continue;
 		}
 		DrawGraph(
-					shot[i].x - shot[i].width / 2,
-					shot[i].y - shot[i].height / 2,
-					shot[i].gh,
-					TRUE
+				shot[i].x - shot[i].width / 2,
+				shot[i].y - shot[i].height / 2,
+				shot[i].gh,
+				TRUE
 				);
 	}
 
 	//¶‚«‚Ä‚ê‚Î•`‰æ
 	if (damageflag) {
 //		if (dcount > 20) {
-		if (dcount > 60) {
-//			if (dcount % 2 == 0) {
-			if (dcount / 12  % 2 == 0) {
-				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 140);
-				DrawGraph(PLAYER_INITX - width / 2, PLAYER_INITY - height / 2 + 60 - (dcount / 3 - 20), gh[1], TRUE);
-				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-			}
-			else {
-				DrawGraph(PLAYER_INITX - width / 2, PLAYER_INITY - height / 2 + 60 - (dcount / 3 - 20), gh[1], TRUE);
-			}
+//		if (dcount > 60) {
+		if (dcount <= 60) {
+			++dcount;
+			return;
+		}
+//		if (dcount % 2 == 0) {
+		if (dcount / 12  % 2 == 0) {
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 140);
+			DrawGraph(PLAYER_INITX - width / 2, PLAYER_INITY - height / 2 + 60 - (dcount / 3 - 20), gh[1], TRUE);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		}
+		else {
+			DrawGraph(PLAYER_INITX - width / 2, PLAYER_INITY - height / 2 + 60 - (dcount / 3 - 20), gh[1], TRUE);
 		}
 		++dcount;
 //		if (dcount == 80) {
-		if (dcount == 240) {
-			damageflag = false;
-			dcount = 0;
-			//À•W‚ð‰Šú’l‚É–ß‚·
-			x = PLAYER_INITX;
-			y = PLAYER_INITY;
-			//ãŒü‚«‚Ì‰æ‘œ‚É‚·‚é
-			result = 1;
+//		if (dcount == 240) {
+		if (dcount < 240) {
+			return;
 		}
+		damageflag = false;
+		dcount = 0;
+		//À•W‚ð‰Šú’l‚É–ß‚·
+		x = PLAYER_INITX;
+		y = PLAYER_INITY;
+		//ãŒü‚«‚Ì‰æ‘œ‚É‚·‚é
+		result = 1;
 	}
 	else {
 		//’Êí•`‰æ
@@ -269,13 +273,19 @@ void PLAYER::All()
 	++count;
 }
 
-void PLAYER::GetPosition(double* x, double* y)
+void PLAYER::GetPosition(
+	double* x,
+	double* y
+)
 {
 	*x = this->x;
 	*y = this->y;
 }
 
-void PLAYER::SetShotFlag(int index, bool flag)
+void PLAYER::SetShotFlag(
+	int		index,
+	bool	flag
+)
 {
 	shot[index].flag = flag;
 }
@@ -296,10 +306,10 @@ bool PLAYER::GetDamageFlag()
 }
 
 bool PLAYER::GetShotPosition(
-								int		index,
-								double*	x,
-								double*	y
-							)
+	int		index,
+	double*	x,
+	double*	y
+)
 {
 	if (shot[index].flag) {
 		*x = shot[index].x;

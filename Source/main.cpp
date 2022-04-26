@@ -15,7 +15,12 @@ int g_count;
 int main() {}
 
 // ÉvÉçÉOÉâÉÄÇÕ WinMain Ç©ÇÁénÇ‹ÇËÇ‹Ç∑
-int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine, int nCmdShow )
+int WINAPI WinMain(
+	HINSTANCE	hInstance,
+	HINSTANCE	hPrevInstance,
+	LPSTR		lpCmdLine,
+	int			nCmdShow
+)
 {
 	ChangeWindowMode(TRUE);
 

@@ -37,21 +37,31 @@ class CONTROL{
 private:
 	CONTROL();
 	~CONTROL();
-	void EnemyDeadEffect(double x, double y);
+	void EnemyDeadEffect(
+		double x,
+		double y
+	);
 	void SoundAll();
 	void CollisionAll();
 	bool CircleCollision(
-							double c1,
-							double c2,
-							double cx1,
-							double cx2,
-							double cy1,
-							double cy2
-						);
+		double c1,
+		double c2,
+		double cx1,
+		double cx2,
+		double cy1,
+		double cy2
+	);
 public:
 	void All();
-	void GetPlayerPosition(double *x,double *y);
-	void GetEnemyPosition(int index,double *x,double *y);
+	void GetPlayerPosition(
+		double *x,
+		double *y
+	);
+	void GetEnemyPosition(
+		int		index,
+		double	*x,
+		double	*y
+	);
 	static CONTROL& GetInstance(){
 		static CONTROL control;
 		return control;

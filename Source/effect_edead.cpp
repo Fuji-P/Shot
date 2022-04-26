@@ -72,7 +72,10 @@ void EFFECT_EDEAD::All()
 	Draw();
 }
 
-void EFFECT_EDEAD::SetFlag(double x, double y)
+void EFFECT_EDEAD::SetFlag(
+	double x,
+	double y
+)
 {
 	this->x = x;
 	this->y = y;

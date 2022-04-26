@@ -59,32 +59,44 @@ private:
 	void Shot();
 	void Draw();
 	bool OutCheck();
-	bool ShotOutCheck(int i);
+	bool ShotOutCheck(
+		int i
+	);
 
 public:
 	bool All();
 	bool GetShotSound();
 	bool GetDeadFlag();
-	bool GetShotPosition(int index, double* x, double* y);
-	void GetPosition(double* x, double* y);
+	bool GetShotPosition(
+		int		index,
+		double*	x,
+		double*	y
+	);
+	void GetPosition(
+		double* x,
+		double* y
+	);
 	void SetDeadFlag();
-	void SetShotFlag(int index, bool flag);
+	void SetShotFlag(
+		int		index,
+		bool	flag
+	);
 	int GetShotType();
 	ENEMY(
-			int type,
-			int stype,
-			int m_pattern,
-			int s_pattern,
-			int in_time,
-			int stop_time,
-			int shot_time,
-			int out_time,
-			int x,
-			int y,
-			int speed,
-			int hp,
-			int item
-		);
+		int type,
+		int stype,
+		int m_pattern,
+		int s_pattern,
+		int in_time,
+		int stop_time,
+		int shot_time,
+		int out_time,
+		int x,
+		int y,
+		int speed,
+		int hp,
+		int item
+	);
 };
 
 #endif

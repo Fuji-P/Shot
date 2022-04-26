@@ -36,6 +36,9 @@ private:
 public:
 	EFFECT_EDEAD();
 	bool GetFlag();
-	void SetFlag(double x, double y);
+	void SetFlag(
+		double x,
+		double y
+	);
 	void All();
 };

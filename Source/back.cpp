@@ -22,7 +22,9 @@ void BACK::Draw()
 	DrawGraph(x, y - 460, gh, FALSE);
 
 	//一番下までスクロールしたら初期値に戻す
-	if (y == 460 + MARGIN) y = 10;
+	if (y == 460 + MARGIN) {
+		y = 10;
+	}
 }
 
 void BACK::Move()

@@ -37,6 +37,8 @@
 
 #define ENEMY_ANUM 13
 
+#define EFFECT_EDEADNUM 20
+
 //当たり判定用半径定義
 #define PLAYER_COLLISION 4
 #define ENEMY1_COLLISION 14
@@ -46,7 +48,6 @@
 #define ESHOT1_COLLISION 3
 #define ESHOT2_COLLISION 2
 
-#define EFFECT_EDEADNUM 20
 
 //extern宣言してどこからでもアクセスできるようにする
 //key配列

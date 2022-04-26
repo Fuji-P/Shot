@@ -55,8 +55,14 @@ public:
 		double* x,
 		double* y
 	);
-	void GetPosition(double* x, double* y);
+	void GetPosition(
+		double* x,
+		double* y
+	);
 	void SetDamageFlag();
-	void SetShotFlag(int index, bool flag);
+	void SetShotFlag(
+		int		index,
+		bool	flag
+	);
 	void All();
 };
