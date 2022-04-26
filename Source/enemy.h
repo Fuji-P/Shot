@@ -52,6 +52,8 @@ private:
 	//ショットが打てるようになってからのカウント
 	int scount;
 
+	bool s_shot;
+
 private:
 	void Move();
 	void Shot();
@@ -61,6 +63,7 @@ private:
 
 public:
 	bool All();
+	bool GetShotSound();
 	void GetPosition(double* x, double* y);
 	ENEMY(
 			int type,

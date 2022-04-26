@@ -92,6 +92,7 @@ ENEMY::ENEMY(
 	deadflag = false;
 	endflag = false;
 	sflag = false;
+	s_shot = false;
 }
 
 
@@ -201,6 +202,9 @@ void ENEMY::Shot()
 		return;
 	}
 
+	//ショット音フラグを戻す
+	s_shot = false;
+
 	//プレイヤーの一取得
 	control.GetPlayerPosition(&px, &py);
 
@@ -227,6 +231,8 @@ void ENEMY::Shot()
 						break;
 					}
 				}
+				//ショットサウンドフラグを立てる
+				s_shot = true;
 			}
 			break;
 
@@ -245,6 +251,8 @@ void ENEMY::Shot()
 						break;
 					}
 				}
+				//ショットサウンドフラグを立てる
+				s_shot = true;
 			}
 			break;
 
@@ -285,6 +293,8 @@ void ENEMY::Shot()
 						}
 					}
 				}
+				//ショットサウンドフラグを立てる
+				s_shot = true;
 			}
 			break;
 
@@ -310,6 +320,8 @@ void ENEMY::Shot()
 					++num;
 					break;
 				}
+				//ショットサウンドフラグを立てる
+				s_shot = true;
 			}
 			break;
 	}
@@ -402,4 +414,9 @@ void ENEMY::GetPosition(double* x, double* y)
 	*x = this->x;
 	*y = this->y;
 
+}
+
+bool ENEMY::GetShotSound()
+{
+	return s_shot;
 }

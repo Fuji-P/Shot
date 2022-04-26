@@ -92,6 +92,13 @@ out:
 								data[i].item
 							);
 	}
+
+	//サウンドファイル読み込み
+	s_eshot = LoadSoundMem("enemyshot.wav");
+	s_pshot = LoadSoundMem("playershot.wav");
+
+	eshot_flag = false;
+	pshot_flag = false;
 }
 
 CONTROL::~CONTROL()
@@ -110,6 +117,10 @@ CONTROL::~CONTROL()
 
 void CONTROL::All()
 {
+
+	//サウンドフラグを初期化
+	eshot_flag = pshot_flag = false;
+
 	//描画領域を指定
 	SetDrawArea(MARGIN, MARGIN, MARGIN + 380, MARGIN + 460);
 
@@ -118,15 +129,39 @@ void CONTROL::All()
 	//プレイヤークラスのAll関数実行
 	player->All();
 
+	//プレイヤーショットサウンドフラグチェック
+	if (player->GetShotSound()) {
+		pshot_flag = true;
+	}
+
 	for (int i = 0; i < ENEMY_NUM; ++i) {
 		if (enemy[i] != NULL) {
+			//敵ショットサウンドフラグチェック
+			if (enemy[i]->GetShotSound()) {
+				eshot_flag = true;
+			}
+
 			if (enemy[i]->All()) {
 				delete enemy[i];
 				enemy[i] = NULL;
 			}
 		}
 	}
+	SoundAll();
 	++g_count;
+}
+
+void CONTROL::SoundAll()
+{
+
+	if (pshot_flag) {
+		PlaySoundMem(s_pshot, DX_PLAYTYPE_BACK);
+	}
+
+	if (eshot_flag) {
+		PlaySoundMem(s_eshot, DX_PLAYTYPE_BACK);
+	}
+
 }
 
 void CONTROL::GetPlayerPosition(double* x, double* y)

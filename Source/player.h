@@ -33,6 +33,8 @@ private:
 	//ƒJƒEƒ“ƒg
 	int count;
 
+	bool s_shot;
+
 private:
 	void Move();
 	void Draw();
@@ -40,6 +42,7 @@ private:
 
 public:
 	PLAYER();
+	bool GetShotSound();
 	void GetPosition(double* x, double* y);
 	void All();
 

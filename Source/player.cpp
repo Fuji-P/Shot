@@ -15,25 +15,25 @@ PLAYER::PLAYER()
 		MSG("エラー発生");
 	}
 
-	width=29;
-	height=40;
+	width = 29;
+	height = 40;
 
 	//移動係数
-//	move=1.0f;
-	move=0.5f;
+//	move = 1.0f;
+	move = 0.5f;
 
 	//横方向と縦方向のカウント数。
-	xcount=0,ycount=0;
+	xcount = 0, ycount = 0;
 
 	//添字用変数
-	ix=0,iy=0,result=0;
+	ix = 0, iy = 0, result = 0;
 
 	//初期位置
-	x=180;
-	y=400;
+	x = 180;
+	y = 400;
 
 	//生きているかどうか
-	life=true;
+	life = true;
 
 	//弾初期化
 	memset(shot, 0, sizeof(shot));
@@ -53,6 +53,7 @@ PLAYER::PLAYER()
 	}
 
 	count = 0;
+	s_shot = false;
 
 }
 void PLAYER::Move()
@@ -173,6 +174,8 @@ void PLAYER::Move()
 
 void PLAYER::Shot()
 {
+	s_shot = false;
+
 	//キーが押されててかつ、6ループに一回発射
 //	if (key[KEY_INPUT_Z] == 1 && count % 6 == 0) {
 	if (key[KEY_INPUT_Z] == 1 && count % 12 == 0) {
@@ -184,6 +187,8 @@ void PLAYER::Shot()
 				break;
 			}
 		}
+		//ショットサウンドフラグを立てる
+		s_shot = true;
 	}
 
 	//弾を移動させる処理
@@ -231,4 +236,9 @@ void PLAYER::GetPosition(double* x, double* y)
 {
 	*x = this->x;
 	*y = this->y;
+}
+
+bool PLAYER::GetShotSound()
+{
+	return s_shot;
 }
