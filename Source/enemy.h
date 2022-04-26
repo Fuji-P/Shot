@@ -40,6 +40,11 @@ private:
 	//ショットが打てるようになってからのカウント
 	int scount;
 
+	//HP
+	int hp;
+	//アイテム
+	int item;
+
 public:
 	bool All();
 
@@ -50,18 +55,18 @@ public:
 	void Draw();
 
 	ENEMY(
-			const char* 	c_filename,
-			int				type,
-			int				m_pattern,
-			int				x,
-			int				y,
-			int				in_time,
-			int				stop_time,
-			int				shot_time,
-			int				out_time,
-			const char*		s_filename,
-			int				stype,
-			int				s_pattern,
-			int				speed
+			int type,
+			int stype,
+			int m_pattern,
+			int s_pattern,
+			int in_time,
+			int stop_time,
+			int shot_time,
+			int out_time,
+			int x,
+			int y,
+			int speed,
+			int hp,
+			int item
 		);
 };

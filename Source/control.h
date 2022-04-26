@@ -13,7 +13,7 @@ private:
 	PLAYER* player;
 
 	//エネミークラスのポインタ
-	ENEMY* enemy;
+	ENEMY* enemy[ENEMY_NUM];
 
 	//背景クラス
 	BACK *back;

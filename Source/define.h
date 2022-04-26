@@ -26,6 +26,10 @@
 
 #define ENEMY_SNUM 50
 
+#define ENEMY_NUM 5
+
+#define ENEMY_ANUM 13
+
 //extern宣言してどこからでもアクセスできるようにする
 //key配列
 extern char key[256];
@@ -49,4 +53,20 @@ struct E_SHOT {
 	int		width, height;	//画像の幅と高さ
 	int		pattern;		//ショットパターン
 	int		speed;			//弾スピード
+};
+
+struct ENEMYDATA {
+	int		type;			//敵種類
+	int		stype;			//弾種類
+	int		m_pattern;		//移動パターン
+	int		s_pattern;		//発射パターン
+	int		in_time;		//出現時間
+	int		stop_time;		//停止時間
+	int		shot_time;		//弾発射時間
+	int		out_time;		//帰還時間
+	int		x;				//x座標
+	int		y;				//y座標
+	int		speed;			//弾スピード
+	int		hp;				//HP
+	int		item;			//アイテム
 };

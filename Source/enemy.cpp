@@ -7,24 +7,21 @@
 #include "enemy.h"
 
 ENEMY::ENEMY(
-				const char*		c_filename,
-				int				type,
-				int				m_pattern,
-				int				x,
-				int				y,
-				int				in_time,
-				int				stop_time,
-				int				shot_time,
-				int				out_time,
-				const char*		s_filename,
-				int				stype,
-				int				s_pattern,
-				int				speed
+				int type,
+				int stype,
+				int m_pattern,
+				int s_pattern,
+				int in_time,
+				int stop_time,
+				int shot_time,
+				int out_time,
+				int x,
+				int y,
+				int speed,
+				int hp,
+				int item
 			)
 {
-
-	//読み込み
-	LoadDivGraph(c_filename, 3, 1, 3, 27, 25, gh);
 
 	//サイズ
 	width = 27;
@@ -32,19 +29,15 @@ ENEMY::ENEMY(
 
 	//敵の種類
 	this->type = type;
-
-	//弾の種類
 	this->stype = stype;
 
 	//移動パターンとショットパターン
 	this->m_pattern = m_pattern;
 	this->s_pattern = s_pattern;
 
-	//座標セット
 	this->x = x;
 	this->y = y;
 
-	//出現、停止、発射、帰還時間セット
 	this->in_time = in_time;
 
 	this->stop_time = stop_time;
@@ -53,12 +46,24 @@ ENEMY::ENEMY(
 
 	this->out_time = out_time;
 
-	//弾画像とサイズ取得
-	int temp = LoadGraph(s_filename);
+	//hpとアイテム代入
+	this->hp = hp;
+	this->item = item;
+
+	//敵画像読み込み
+	if (type == 0) {
+		LoadDivGraph("enemy.png", 3, 1, 3, 27, 25, gh);
+	}
+
+	int temp;
+	//弾画像読み込み
+	if (stype == 0) {
+		temp = LoadGraph("enemyshot1.png");
+	}
+
 	int w, h;
 	GetGraphSize(temp, &w, &h);
 
-	//弾の初期化
 	for (int i = 0; i < ENEMY_SNUM; ++i) {
 		shot[i].flag = false;
 		shot[i].gh = temp;
@@ -77,6 +82,7 @@ ENEMY::ENEMY(
 	endflag = false;
 	sflag = false;
 }
+
 
 void ENEMY::Move()
 {
