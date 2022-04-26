@@ -13,6 +13,11 @@ CONTROL::CONTROL()
 
 	back = new BACK;
 
+	//エフェクトクラスのインスタンス生成
+	for (int i = 0; i < EFFECT_EDEADNUM; ++i) {
+		effect_edead[i] = new EFFECT_EDEAD;
+	}
+
 	FILE* fp;
 	ENEMYDATA data[ENEMY_NUM];
 	char buf[100];
@@ -146,6 +151,13 @@ CONTROL::~CONTROL()
 			delete enemy[i];
 		}
 	}
+
+	//敵消滅エフェクト
+	for (int i = 0; i < EFFECT_EDEADNUM; ++i) {
+		if (effect_edead[i] != NULL) {
+			delete effect_edead[i];
+		}
+	}
 }
 
 void CONTROL::All()
@@ -184,8 +196,27 @@ void CONTROL::All()
 
 	//当たり判定
 	CollisionAll();
+
+	//敵消滅エフェクト
+	for (int i = 0; i < EFFECT_EDEADNUM; ++i) {
+		if (effect_edead[i]->GetFlag()) {
+			effect_edead[i]->All();
+		}
+	}
+
 	SoundAll();
 	++g_count;
+}
+
+void CONTROL::EnemyDeadEffect(double x, double y)
+{
+	//エフェクトセット
+	for (int z = 0; z < EFFECT_EDEADNUM; ++z) {
+		if (!effect_edead[z]->GetFlag()) {
+			effect_edead[z]->SetFlag(x, y);
+			break;
+		}
+	}
 }
 
 void CONTROL::SoundAll()
@@ -259,6 +290,8 @@ void CONTROL::CollisionAll()
 			player->SetShotFlag(i, false);
 			//敵消滅音フラグセット
 			edead_flag = true;
+			//敵消滅エフェクトセット
+			EnemyDeadEffect(ex, ey);
 		}
 	}
 

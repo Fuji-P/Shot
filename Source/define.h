@@ -46,6 +46,8 @@
 #define ESHOT1_COLLISION 3
 #define ESHOT2_COLLISION 2
 
+#define EFFECT_EDEADNUM 20
+
 //extern宣言してどこからでもアクセスできるようにする
 //key配列
 extern char key[256];

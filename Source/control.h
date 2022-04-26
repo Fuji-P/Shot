@@ -6,6 +6,7 @@
 #include "player.h"
 #include "enemy.h"
 #include "back.h"
+#include "effect_edead.h"
 
 class CONTROL{
 
@@ -17,6 +18,9 @@ class CONTROL{
 
 	//敵クラス
 	ENEMY *enemy[ENEMY_NUM];
+
+	//敵消滅エフェクトクラス
+	EFFECT_EDEAD *effect_edead[EFFECT_EDEADNUM];
 
 	//サウンドハンドル
 	int s_edead;
@@ -33,6 +37,7 @@ class CONTROL{
 private:
 	CONTROL();
 	~CONTROL();
+	void EnemyDeadEffect(double x, double y);
 	void SoundAll();
 	void CollisionAll();
 	bool CircleCollision(
