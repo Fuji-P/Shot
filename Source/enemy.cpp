@@ -86,18 +86,66 @@ ENEMY::ENEMY(
 
 void ENEMY::Move()
 {
-	//出てきてから止まる時間までの間なら下に移動
-	if (in_time < g_count && g_count < stop_time) {
-//		y += 2;
-		y += 1;
-		//帰還時間を過ぎたら戻る。
-	}
-	else if (g_count > out_time) {
-//		y -= 2;
-		y -= 1;
-		if (y < -40) {
-			endflag = true;
+	//まだ生きてるか画面内に居るときだけ処理
+	if (!deadflag) {
+		switch (m_pattern) {
+			//途中で止まって、そのまま後ろに帰るパターン
+		case 0:
+
+			//出てきてから止まる時間までの間なら下に移動
+			if (in_time < g_count && g_count < stop_time) {
+//				y += 2;
+				y += 1;
+				//帰還時間を過ぎたら戻る。
+			}
+			else if (g_count > out_time) {
+//				y -= 2;
+				y -= 1;
+			}
+			break;
+
+			//そのまま止まらずに下に行くパターン
+		case 1:
+
+			if (in_time <= g_count) {
+//				y += 2;
+				y += 1;
+			}
+
+			break;
+
+			//ちょっとずつ左に移動しながら消えていく
+		case 2:
+			if (in_time <= g_count) {
+//				y += 1;
+				y += 0.5;
+				if (count % 10 == 0) {
+//					x -= 1;
+					x -= 0.5;
+				}
+			}
+			break;
+
+			//ちょっとずつ右に移動しながら消えていく
+		case 3:
+			if (in_time <= g_count) {
+//				y += 1;
+				y += 0.5;
+				if (count % 10 == 0) {
+//					x += 1;
+					x += 0.5;
+				}
+			}
+			break;
+
 		}
+		//画面からはみ出したら、deadflag(はみ出すか死ぬかのフラグ)をtrueにする。
+		if (g_count >= stop_time) {
+			if (OutCheck()) {
+				deadflag = true;
+			}
+		}
+		++count;
 	}
 }
 
@@ -115,7 +163,7 @@ void ENEMY::Draw()
 	if (!endflag) {
 
 //		temp = count % 40 / 10;
-		temp = count % 80 / 20;
+		temp = count % 120 / 30;
 		if (temp == 3)
 			temp = 1;
 
@@ -189,4 +237,14 @@ bool ENEMY::All()
 	++count;
 
 	return endflag;
+}
+
+bool ENEMY::OutCheck()
+{
+	if (x < -50 || x > 520 || y < -50 || y > 530) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }

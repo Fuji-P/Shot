@@ -19,7 +19,8 @@ PLAYER::PLAYER()
 	height=40;
 
 	//ˆÚ“®ŒW”
-	move=1.0f;
+//	move=1.0f;
+	move=0.5f;
 
 	//‰¡•ûŒü‚Æc•ûŒü‚ÌƒJƒEƒ“ƒg”B
 	xcount=0,ycount=0;
@@ -61,13 +62,16 @@ void PLAYER::Move()
 			
 			if(key[KEY_INPUT_UP] == 1 || key[KEY_INPUT_DOWN] == 1) {
 				//ˆÚ“®ŒW”‚ğ‚OD‚V‚P‚Éİ’è
-				move = 0.71f;
+//				move = 0.71f;
+				move = 0.355f;
 			} else {
 				//Î‚ß‚¶‚á‚È‚¯‚ê‚Î‚PD‚O‚Éİ’è
-				move = 1.0f;
+//				move = 1.0f;
+				move = 0.5f;
 			}
 		} else if(key[KEY_INPUT_UP] == 1 || key[KEY_INPUT_DOWN] == 1) {
-			move = 1.0f;
+//			move = 1.0f;
+			move = 0.5f;
 		}
 
 		//¶

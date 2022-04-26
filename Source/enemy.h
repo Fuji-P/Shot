@@ -46,14 +46,6 @@ private:
 	int item;
 
 public:
-	bool All();
-
-	void Move();
-
-	void Shot();
-
-	void Draw();
-
 	ENEMY(
 			int type,
 			int stype,
@@ -69,4 +61,15 @@ public:
 			int hp,
 			int item
 		);
+
+	void Move();
+
+	void Shot();
+
+	void Draw();
+
+	bool All();
+
+	bool OutCheck();
+
 };
