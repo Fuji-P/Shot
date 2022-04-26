@@ -24,6 +24,8 @@
 //弾の速度
 #define PSHOT_SPEED 7
 
+#define ENEMY_SNUM 50
+
 //extern宣言してどこからでもアクセスできるようにする
 //key配列
 extern char key[256];
@@ -37,4 +39,14 @@ struct SHOT {
 	double	y;				//y座標
 	int		gh;				//グラフィックハンドル
 	int		width, height;	//画像の幅と高さ
+};
+
+struct E_SHOT {
+	bool	flag;			//弾が発射中かどうか
+	double	x;				//x座標
+	double	y;				//y座標
+	int		gh;				//グラフィックハンドル
+	int		width, height;	//画像の幅と高さ
+	int		pattern;		//ショットパターン
+	int		speed;			//弾スピード
 };

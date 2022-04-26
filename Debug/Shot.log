@@ -2,7 +2,6 @@
   control.cpp
   enemy.cpp
   main.cpp
-C:\Users\S-SAOTOME\source\repos\Shot\Source\main.cpp(15,13): warning C4326: 'main' の戻り値の型には、'int' を使用してください。'void' は使用できません
   pch.cpp
   player.cpp
   コードを生成中...

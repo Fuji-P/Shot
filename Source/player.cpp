@@ -170,8 +170,9 @@ void PLAYER::Move()
 void PLAYER::Shot()
 {
 	//キーが押されててかつ、6ループに一回発射
-	if (key[KEY_INPUT_Z] == 1 && count % 6 == 0) {
-		for (int i = 0; i < PSHOT_NUM; ++i) {
+//	if (key[KEY_INPUT_Z] == 1 && count % 6 == 0) {
+	if (key[KEY_INPUT_Z] == 1 && count % 12 == 0) {
+	for (int i = 0; i < PSHOT_NUM; ++i) {
 			if (shot[i].flag == false) {
 				shot[i].flag = true;
 				shot[i].x = x;

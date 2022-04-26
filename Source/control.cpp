@@ -12,7 +12,26 @@ CONTROL::CONTROL()
 	player = new PLAYER;
 
 	//エネミークラスの生成
-	enemy = new ENEMY;
+//						120,
+//						180,
+//						181,
+//						360,
+
+	enemy = new ENEMY(
+						"enemy.png",
+						0,
+						0,
+						50,
+						-40,
+						240,
+						360,
+						362,
+						720,
+						"enemyshot1.png",
+						0,
+						0,
+						2
+					);
 
 	back = new BACK;
 

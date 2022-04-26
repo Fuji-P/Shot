@@ -12,7 +12,7 @@ char key[256];
 //ゲームが開始してから何ループしたのか
 int g_count;
 
-void main() {}
+int main() {}
 
 // プログラムは WinMain から始まります
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine, int nCmdShow )
