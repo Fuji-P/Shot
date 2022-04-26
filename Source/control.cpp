@@ -11,6 +11,9 @@ CONTROL::CONTROL()
 	//プレイヤークラスの生成
 	player = new PLAYER;
 
+	//エネミークラスの生成
+	enemy = new ENEMY;
+
 	back = new BACK;
 
 }
@@ -30,4 +33,13 @@ void CONTROL::All()
 
 	//プレイヤークラスのAll関数実行
 	player->All();
+
+	if (enemy != NULL) {
+		if (enemy -> All()) {
+			delete enemy;
+			enemy = NULL;
+		}
+	}
+
+	++g_count;
 }

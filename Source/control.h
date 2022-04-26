@@ -4,12 +4,16 @@
 */
 
 #include "player.h"
+#include "enemy.h"
 #include "back.h"
 
 class CONTROL{
 private:
 	//プレイヤークラスのポインタ
-	PLAYER *player;
+	PLAYER* player;
+
+	//エネミークラスのポインタ
+	ENEMY* enemy;
 
 	//背景クラス
 	BACK *back;

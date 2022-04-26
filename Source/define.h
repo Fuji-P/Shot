@@ -24,8 +24,12 @@
 //弾の速度
 #define PSHOT_SPEED 7
 
-//extern宣言してkey配列にどこからでもアクセスできるようにする
+//extern宣言してどこからでもアクセスできるようにする
+//key配列
 extern char key[256];
+
+//ゲームが開始してから何ループしたのか
+extern int g_count;
 
 struct SHOT {
 	bool	flag;			//弾が発射中かどうか

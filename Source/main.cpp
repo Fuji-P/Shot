@@ -9,6 +9,9 @@
 //キー取得用配列
 char key[256];
 
+//ゲームが開始してから何ループしたのか
+int g_count;
+
 void main() {}
 
 // プログラムは WinMain から始まります
