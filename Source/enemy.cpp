@@ -406,6 +406,16 @@ void ENEMY::SetDeadFlag()
 	deadflag = true;
 }
 
+void ENEMY::SetShotFlag(int index, bool flag)
+{
+	shot[index].flag = flag;
+}
+
+int ENEMY::GetShotType()
+{
+	return stype;
+}
+
 bool ENEMY::All()
 {
 	Move();
@@ -448,4 +458,16 @@ bool ENEMY::GetShotSound()
 bool ENEMY::GetDeadFlag()
 {
 	return deadflag;
+}
+
+bool ENEMY::GetShotPosition(int index, double* x, double* y)
+{
+	if (shot[index].flag) {
+		*x = shot[index].x;
+		*y = shot[index].y;
+		return true;
+	}
+	else {
+		return false;
+	}
 }

@@ -12,6 +12,9 @@
 //プレイヤーの歩くスピード
 #define PLAYER_SPEED 4
 
+#define PLAYER_INITX 180
+#define PLAYER_INITY 400
+
 //メッセージボックス
 #define MSG(m) {\
 	MessageBox(NULL,m, "メッセージ", MB_OK);}
@@ -35,13 +38,13 @@
 #define ENEMY_ANUM 13
 
 //当たり判定用半径定義
-#define PLAYER_COLLISION 6
+#define PLAYER_COLLISION 4
 #define ENEMY1_COLLISION 14
 
 #define PSHOT_COLLISION 3
-#define ESHOT1_COLLISION 12
-#define ESHOT2_COLLISION 3
-#define ESHOT3_COLLISION 2
+#define ESHOT0_COLLISION 10
+#define ESHOT1_COLLISION 3
+#define ESHOT2_COLLISION 2
 
 //extern宣言してどこからでもアクセスできるようにする
 //key配列

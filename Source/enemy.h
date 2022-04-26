@@ -65,8 +65,11 @@ public:
 	bool All();
 	bool GetShotSound();
 	bool GetDeadFlag();
-	void SetDeadFlag();
+	bool GetShotPosition(int index, double* x, double* y);
 	void GetPosition(double* x, double* y);
+	void SetDeadFlag();
+	void SetShotFlag(int index, bool flag);
+	int GetShotType();
 	ENEMY(
 			int type,
 			int stype,

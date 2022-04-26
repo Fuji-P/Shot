@@ -33,7 +33,7 @@ PLAYER::PLAYER()
 	y = 400;
 
 	//生きているかどうか
-	life = true;
+	damageflag = false;
 
 	//弾初期化
 	memset(shot, 0, sizeof(shot));
@@ -53,6 +53,7 @@ PLAYER::PLAYER()
 	}
 
 	count = 0;
+	dcount = 0;
 	s_shot = false;
 
 }
@@ -176,18 +177,20 @@ void PLAYER::Shot()
 {
 	s_shot = false;
 
-	//キーが押されててかつ、6ループに一回発射
-//	if (key[KEY_INPUT_Z] == 1 && count % 6 == 0) {
-	if (key[KEY_INPUT_Z] == 1 && count % 12 == 0) {
-		for (int i = 0; i < PSHOT_NUM; ++i) {
-			if (shot[i].flag == false) {
-				shot[i].flag = true;
-				shot[i].x = x;
-				shot[i].y = y;
-				break;
+	if (!damageflag) {
+		//キーが押されててかつ、6ループに一回発射
+//		if (key[KEY_INPUT_Z] == 1 && count % 6 == 0) {
+		if (key[KEY_INPUT_Z] == 1 && count % 12 == 0) {
+			for (int i = 0; i < PSHOT_NUM; ++i) {
+				if (shot[i].flag == false) {
+					shot[i].flag = true;
+					shot[i].x = x;
+					shot[i].y = y;
+					break;
+				}
+				//ショットサウンドフラグを立てる
+				s_shot = true;
 			}
-			//ショットサウンドフラグを立てる
-			s_shot = true;
 		}
 	}
 
@@ -223,17 +226,43 @@ void PLAYER::Draw()
 	}
 
 	//生きてれば描画
-//	if (life) {
-	if (!life) {
-		return;
+	if (damageflag) {
+//		if (dcount > 20) {
+		if (dcount > 60) {
+//			if (dcount % 2 == 0) {
+			if (dcount / 12  % 2 == 0) {
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 140);
+				DrawGraph(PLAYER_INITX - width / 2, PLAYER_INITY - height / 2 + 60 - (dcount / 3 - 20), gh[1], TRUE);
+				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+			}
+			else {
+				DrawGraph(PLAYER_INITX - width / 2, PLAYER_INITY - height / 2 + 60 - (dcount / 3 - 20), gh[1], TRUE);
+			}
+		}
+		++dcount;
+//		if (dcount == 80) {
+		if (dcount == 240) {
+			damageflag = false;
+			dcount = 0;
+			//座標を初期値に戻す
+			x = PLAYER_INITX;
+			y = PLAYER_INITY;
+			//上向きの画像にする
+			result = 1;
+		}
 	}
-	//描画
-	DrawGraph(x - width / 2, y - height / 2, gh[result], TRUE);
+	else {
+		//通常描画
+		DrawGraph(x - width / 2, y - height / 2, gh[result], TRUE);
+	}
 }
 
 void PLAYER::All()
 {
-	Move();
+	//消滅してないときだけ実行
+	if (!damageflag) {
+		Move();
+	}
 	Shot();
 	Draw();
 
@@ -251,9 +280,19 @@ void PLAYER::SetShotFlag(int index, bool flag)
 	shot[index].flag = flag;
 }
 
+void PLAYER::SetDamageFlag()
+{
+	damageflag = true;
+}
+
 bool PLAYER::GetShotSound()
 {
 	return s_shot;
+}
+
+bool PLAYER::GetDamageFlag()
+{
+	return damageflag;
 }
 
 bool PLAYER::GetShotPosition(

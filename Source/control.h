@@ -20,6 +20,7 @@ class CONTROL{
 
 	//サウンドハンドル
 	int s_edead;
+	int s_pdead;
 	int s_eshot;
 	int s_pshot;
 
@@ -27,6 +28,7 @@ class CONTROL{
 	bool eshot_flag;
 	bool pshot_flag;
 	bool edead_flag;
+	bool pdead_flag;
 
 private:
 	CONTROL();

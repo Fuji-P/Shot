@@ -124,10 +124,12 @@ out:
 
 	//サウンドファイル読み込み
 	s_edead = LoadSoundMem("enemydead.wav");
+	s_pdead = LoadSoundMem("playdead.wav");
 	s_eshot = LoadSoundMem("enemyshot.wav");
 	s_pshot = LoadSoundMem("playershot.wav");
 
 	edead_flag = false;
+	pdead_flag = false;
 	eshot_flag = false;
 	pshot_flag = false;
 }
@@ -150,7 +152,7 @@ void CONTROL::All()
 {
 
 	//サウンドフラグを初期化
-	edead_flag = eshot_flag = pshot_flag = false;
+	edead_flag = pdead_flag =  eshot_flag = pshot_flag = false;
 
 	//描画領域を指定
 	SetDrawArea(MARGIN, MARGIN, MARGIN + 380, MARGIN + 460);
@@ -201,6 +203,10 @@ void CONTROL::SoundAll()
 		PlaySoundMem(s_edead, DX_PLAYTYPE_BACK);
 	}
 
+	if (pdead_flag) {
+		PlaySoundMem(s_pdead, DX_PLAYTYPE_BACK);
+	}
+
 }
 
 void CONTROL::GetPlayerPosition(double* x, double* y)
@@ -227,6 +233,8 @@ void CONTROL::GetEnemyPosition(int index, double* x, double* y)
 void CONTROL::CollisionAll()
 {
 	double px, py, ex, ey;
+	bool tempflag = false;
+
 	//操作キャラの弾と敵との当たり判定
 	for (int i = 0; i < PSHOT_NUM; ++i) {
 //		if (player->GetShotPosition(i, &px, &py)) {
@@ -251,6 +259,62 @@ void CONTROL::CollisionAll()
 			player->SetShotFlag(i, false);
 			//敵消滅音フラグセット
 			edead_flag = true;
+		}
+	}
+
+	//敵の弾と操作キャラとの当たり判定
+	//プレイヤーが生きてれば
+//	if (!player->GetDamageFlag()) {
+	if (player->GetDamageFlag()) {
+		return;
+	}
+	player->GetPosition(&px, &py);
+	for (int i = 0; i < ENEMY_NUM; ++i) {
+//		if (enemy[i] != NULL) {
+		if (enemy[i] == NULL) {
+			continue;
+		}
+		for (int s = 0; s < ENEMY_SNUM; ++s) {
+			//弾フラグが立っていればtrueを返す
+//			if (enemy[i]->GetShotPosition(s, &ex, &ey)) {
+			if (!enemy[i]->GetShotPosition(s, &ex, &ey)) {
+				continue;
+			}
+			//弾によって当たり判定が違うのでswitch文で分岐
+			switch (enemy[i]->GetShotType()) {
+
+				case 0:
+					//当たってれば
+					if (CircleCollision(PLAYER_COLLISION, ESHOT0_COLLISION, px, ex, py, ey)) {
+						tempflag = true;
+					}
+					break;
+
+				case 1:
+					if (CircleCollision(PLAYER_COLLISION, ESHOT1_COLLISION, px, ex, py, ey)) {
+						tempflag = true;
+					}
+					break;
+
+				case 2:
+					if (CircleCollision(PLAYER_COLLISION, ESHOT2_COLLISION, px, ex, py, ey)) {
+						tempflag = true;
+						}
+					break;
+			}
+
+//			if (tempflag) {
+			if (!tempflag) {
+				continue;
+			}
+			//操作キャラのdamageflagを立てる
+			player->SetDamageFlag();
+			//弾を消す
+			enemy[i]->SetShotFlag(s, false);
+			//プレイヤー消滅音フラグを立てる
+			pdead_flag = true;
+			//一時フラグを戻す
+			tempflag = false;
 		}
 	}
 }

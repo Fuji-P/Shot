@@ -24,8 +24,12 @@ private:
 	//添字用変数
 	int ix,iy,result;
 
-	//生きてるかどうかのフラグ
-	bool life;
+	//プレイヤーのライフ
+	int life;
+	bool damageflag;
+	bool endflag;
+	//ダメージ中のカウント
+	int dcount;
 
 	//弾
 	SHOT shot[PSHOT_NUM];
@@ -33,6 +37,8 @@ private:
 	//カウント
 	int count;
 
+	//サウンド関連フラグ
+	//ショット音
 	bool s_shot;
 
 private:
@@ -42,13 +48,15 @@ private:
 
 public:
 	PLAYER();
+	bool GetDamageFlag();
 	bool GetShotSound();
-	void GetPosition(double* x, double* y);
-	void All();
-	void SetShotFlag(int index, bool flag);
 	bool GetShotPosition(
-							int		index,
-							double*	x,
-							double*	y
-						);
+		int		index,
+		double* x,
+		double* y
+	);
+	void GetPosition(double* x, double* y);
+	void SetDamageFlag();
+	void SetShotFlag(int index, bool flag);
+	void All();
 };
