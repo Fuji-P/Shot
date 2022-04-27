@@ -57,6 +57,8 @@ private:
 private:
 	void Move();
 	void Shot();
+	void ShotGenerate();
+	void ShotMove();
 	void Draw();
 	bool OutCheck();
 	bool ShotOutCheck(

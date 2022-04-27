@@ -76,7 +76,7 @@ void PLAYER::Move()
 			move = 0.5f;
 		}
 
-		//左
+		//低速
 		if (key[KEY_INPUT_LSHIFT] == 1) {
 			move = move / 2.0f;
 		}
@@ -173,28 +173,43 @@ void PLAYER::Move()
 
 }
 
+/*
 void PLAYER::Shot()
+{
+
+}
+*/
+
+void PLAYER::ShotGenerate()
 {
 	s_shot = false;
 
-	if (!damageflag) {
-		//キーが押されててかつ、6ループに一回発射
-//		if (key[KEY_INPUT_Z] == 1 && count % 6 == 0) {
-		if (key[KEY_INPUT_Z] == 1 && count % 12 == 0) {
-			for (int i = 0; i < PSHOT_NUM; ++i) {
-				if (shot[i].flag) {
-					continue;
-				}
-				shot[i].flag = true;
-				shot[i].x = x;
-				shot[i].y = y;
-				break;
-				//ショットサウンドフラグを立てる
-				s_shot = true;
-			}
-		}
+	if (damageflag) {
+		return;
 	}
 
+	//キーが押されててかつ、6ループに一回発射
+//	if (key[KEY_INPUT_Z] == 1 && count % 6 == 0) {
+//	if (key[KEY_INPUT_Z] == 1 && count % 12 == 0) {
+	if (key[KEY_INPUT_Z] != 1 || count % 12 != 0) {
+		return;
+	}
+
+	for (int i = 0; i < PSHOT_NUM; ++i) {
+		if (shot[i].flag) {
+			continue;
+		}
+		shot[i].flag = true;
+		shot[i].x = x;
+		shot[i].y = y;
+		break;
+		//ショットサウンドフラグを立てる
+		s_shot = true;
+	}
+}
+
+void PLAYER::ShotMove()
+{
 	//弾を移動させる処理
 	for (int i = 0; i < PSHOT_NUM; ++i) {
 		//発射してる弾だけ
@@ -267,7 +282,9 @@ void PLAYER::All()
 	if (!damageflag) {
 		Move();
 	}
-	Shot();
+//	Shot();
+	ShotGenerate();
+	ShotMove();
 	Draw();
 
 	++count;

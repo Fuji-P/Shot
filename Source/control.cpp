@@ -18,95 +18,10 @@ CONTROL::CONTROL()
 		effect_edead[i] = new EFFECT_EDEAD;
 	}
 
-	FILE* fp;
+	//エネミーデータの読み込み
 	ENEMYDATA data[ENEMY_NUM];
-	char buf[100];
-	int c;
-	int col = 1;
-	int row = 0;
 
-	memset(buf, 0, sizeof(buf));
-	fp = fopen("enemydata.csv", "r");
-
-	//ヘッダ読み飛ばし
-	while (fgetc(fp) != '\n');
-
-	while (1) {
-
-		while (1) {
-
-			c = fgetc(fp);
-
-			//末尾ならループを抜ける。
-			if (c == EOF) {
-				goto out;
-			}
-
-			//カンマか改行でなければ、文字としてつなげる
-			if (c != ',' && c != '\n') {
-				strcat(buf, (const char*)&c);
-			}
-			//カンマか改行ならループ抜ける。
-			else {
-				break;
-			}
-		}
-		//ここに来たということは、1セル分の文字列が出来上がったということ
-		switch (col) {
-			//1列目は敵種類を表す。atoi関数で数値として代入。
-			case 1:	
-				data[row].type = atoi(buf);
-				break;
-			//2列目は弾種類。以降省略。
-			case 2:
-				data[row].stype = atoi(buf);
-				break;
-			case 3:
-				data[row].m_pattern = atoi(buf);
-				break;
-			case 4:
-				data[row].s_pattern = atoi(buf);
-				break;
-			case 5:
-				data[row].in_time = atoi(buf);
-				break;
-			case 6:
-				data[row].stop_time = atoi(buf);
-				break;
-			case 7:
-				data[row].shot_time = atoi(buf);
-				break;
-			case 8:
-				data[row].out_time = atoi(buf);
-				break;
-			case 9:
-				data[row].x = atoi(buf);
-				break;
-			case 10:
-				data[row].y = atoi(buf);
-				break;
-			case 11:
-				data[row].speed = atoi(buf);
-				break;
-			case 12:
-				data[row].hp = atoi(buf);
-				break;
-			case 13:
-				data[row].item = atoi(buf);
-				break;
-		}
-		//バッファを初期化
-		memset(buf, 0, sizeof(buf));
-		//列数を足す
-		++col;
-
-		//もし読み込んだ文字が改行だったら列数を初期化して行数を増やす
-		if (c == '\n') {
-			col = 1;
-			++row;
-		}
-	}
-out:
+	LoadEnemyData(data);
 
 	//敵クラス生成
 	for (int i = 0; i < ENEMY_NUM; ++i) {
@@ -146,16 +61,110 @@ CONTROL::~CONTROL()
 
 	delete back;
 
+	//エネミークラスの解放
 	for (int i = 0; i < ENEMY_NUM; ++i) {
 		if (enemy[i] != NULL) {
 			delete enemy[i];
 		}
 	}
 
-	//敵消滅エフェクト
+	//敵消滅エフェクトクラスの解放
 	for (int i = 0; i < EFFECT_EDEADNUM; ++i) {
 		if (effect_edead[i] != NULL) {
 			delete effect_edead[i];
+		}
+	}
+}
+
+void CONTROL::LoadEnemyData(
+	ENEMYDATA *data
+)
+{
+	FILE* fp;
+	char buf[100] = "";
+	int chr;
+	int col = 1;
+	int row = 0;
+
+	memset(buf, 0, sizeof(buf));
+	fp = fopen("enemydata.csv", "r");
+
+	//ヘッダ読み飛ばし
+	while (fgetc(fp) != '\n');
+
+	while (1) {
+
+		while (1) {
+
+			chr = fgetc(fp);
+
+			//末尾ならループを抜ける。
+			if (chr == EOF) {
+				return;
+			}
+
+			//カンマか改行でなければ、文字としてつなげる
+			if (chr != ',' && chr != '\n') {
+				strcat(buf, (const char*)&chr);
+			}
+			//カンマか改行ならループ抜ける。
+			else {
+				break;
+			}
+		}
+		//ここに来たということは、1セル分の文字列が出来上がったということ
+		switch (col) {
+			//1列目は敵種類を表す。atoi関数で数値として代入。
+		case 1:
+			data[row].type = atoi(buf);
+			break;
+			//2列目は弾種類。以降省略。
+		case 2:
+			data[row].stype = atoi(buf);
+			break;
+		case 3:
+			data[row].m_pattern = atoi(buf);
+			break;
+		case 4:
+			data[row].s_pattern = atoi(buf);
+			break;
+		case 5:
+			data[row].in_time = atoi(buf);
+			break;
+		case 6:
+			data[row].stop_time = atoi(buf);
+			break;
+		case 7:
+			data[row].shot_time = atoi(buf);
+			break;
+		case 8:
+			data[row].out_time = atoi(buf);
+			break;
+		case 9:
+			data[row].x = atoi(buf);
+			break;
+		case 10:
+			data[row].y = atoi(buf);
+			break;
+		case 11:
+			data[row].speed = atoi(buf);
+			break;
+		case 12:
+			data[row].hp = atoi(buf);
+			break;
+		case 13:
+			data[row].item = atoi(buf);
+			break;
+		}
+		//バッファを初期化
+		memset(buf, 0, sizeof(buf));
+		//列数を足す
+		++col;
+
+		//もし読み込んだ文字が改行だったら列数を初期化して行数を増やす
+		if (chr == '\n') {
+			col = 1;
+			++row;
 		}
 	}
 }
@@ -194,7 +203,9 @@ void CONTROL::All()
 	}
 
 	//当たり判定
-	CollisionAll();
+//	CollisionAll();
+	CollisionEnemy();
+	CollisionPlayer();
 
 	//敵消滅エフェクト
 	for (int i = 0; i < EFFECT_EDEADNUM; ++i) {
@@ -270,10 +281,16 @@ void CONTROL::GetEnemyPosition(
 	*y = tempy;
 }
 
+/*
 void CONTROL::CollisionAll()
 {
-	double px, py, ex, ey;
-	bool tempflag = false;
+}
+*/
+
+void CONTROL::CollisionEnemy()
+{
+	double px, py;
+	double ex, ey;
 
 	//操作キャラの弾と敵との当たり判定
 	for (int i = 0; i < PSHOT_NUM; ++i) {
@@ -300,6 +317,13 @@ void CONTROL::CollisionAll()
 			EnemyDeadEffect(ex, ey);
 		}
 	}
+}
+
+void CONTROL::CollisionPlayer()
+{
+	double px, py;
+	double ex, ey;
+	bool tempflag = false;
 
 	//敵の弾と操作キャラとの当たり判定
 	//プレイヤーが生きてれば
@@ -317,39 +341,32 @@ void CONTROL::CollisionAll()
 				continue;
 			}
 			//弾によって当たり判定が違うのでswitch文で分岐
+			int eshot_coll = 0;
 			switch (enemy[i]->GetShotType()) {
-
 				case 0:
-					//当たってれば
-					if (CircleCollision(PLAYER_COLLISION, ESHOT0_COLLISION, px, ex, py, ey)) {
-						tempflag = true;
-					}
-					break;
+					eshot_coll = ESHOT0_COLLISION;
+				break;
 
 				case 1:
-					if (CircleCollision(PLAYER_COLLISION, ESHOT1_COLLISION, px, ex, py, ey)) {
-						tempflag = true;
-					}
+					eshot_coll = ESHOT1_COLLISION;
 					break;
 
 				case 2:
-					if (CircleCollision(PLAYER_COLLISION, ESHOT2_COLLISION, px, ex, py, ey)) {
-						tempflag = true;
-						}
+					eshot_coll = ESHOT2_COLLISION;
 					break;
 			}
 
-			if (!tempflag) {
+			//当たってれば
+			if (!CircleCollision(PLAYER_COLLISION, eshot_coll, px, ex, py, ey)) {
 				continue;
 			}
+
 			//操作キャラのdamageflagを立てる
 			player->SetDamageFlag();
 			//弾を消す
 			enemy[i]->SetShotFlag(s, false);
 			//プレイヤー消滅音フラグを立てる
 			pdead_flag = true;
-			//一時フラグを戻す
-			tempflag = false;
 		}
 	}
 }

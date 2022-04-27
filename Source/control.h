@@ -37,12 +37,17 @@ class CONTROL{
 private:
 	CONTROL();
 	~CONTROL();
+	void LoadEnemyData(
+		ENEMYDATA *data
+	);
 	void EnemyDeadEffect(
 		double x,
 		double y
 	);
 	void SoundAll();
-	void CollisionAll();
+//	void CollisionAll();
+	void CollisionEnemy();
+	void CollisionPlayer();
 	bool CircleCollision(
 		double c1,
 		double c2,

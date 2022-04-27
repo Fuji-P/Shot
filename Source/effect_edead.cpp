@@ -49,7 +49,8 @@ void EFFECT_EDEAD::Move()
 
 	rate = 0.5 + count * 0.05;
 
-	alpha = 255 - 255 / 30 * count;
+	int tempalpha = 255;
+	alpha = tempalpha - tempalpha / 30 * count;
 
 	++count;
 

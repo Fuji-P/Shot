@@ -44,7 +44,9 @@ private:
 private:
 	void Move();
 	void Draw();
-	void Shot();
+//	void Shot();
+	void ShotGenerate();
+	void ShotMove();
 
 public:
 	PLAYER();

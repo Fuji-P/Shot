@@ -11,18 +11,21 @@ BACK::BACK()
 	gh = LoadGraph("back1.png");
 
 	x = y = MARGIN;
+
 }
 
 void BACK::Draw()
 {
+	int width = 460;
+
 	//1枚目描画
 	DrawGraph(x, y, gh, FALSE);
 
 	//二枚目描画
-	DrawGraph(x, y - 460, gh, FALSE);
+	DrawGraph(x, y - width, gh, FALSE);
 
 	//一番下までスクロールしたら初期値に戻す
-	if (y == 460 + MARGIN) {
+	if (y == width + MARGIN) {
 		y = 10;
 	}
 }
