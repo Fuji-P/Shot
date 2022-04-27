@@ -154,6 +154,7 @@
     <ClCompile Include="Source\back.cpp" />
     <ClCompile Include="Source\control.cpp" />
     <ClCompile Include="Source\effect_edead.cpp" />
+    <ClCompile Include="Source\effect_pdead.cpp" />
     <ClCompile Include="Source\enemy.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\pch.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="Source\control.h" />
     <ClInclude Include="Source\define.h" />
     <ClInclude Include="Source\effect_edead.h" />
+    <ClInclude Include="Source\effect_pdead.h" />
     <ClInclude Include="Source\enemy.h" />
     <ClInclude Include="Source\pch.h" />
     <ClInclude Include="Source\player.h" />

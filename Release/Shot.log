@@ -1,6 +1,7 @@
 ﻿  back.cpp
   control.cpp
   effect_edead.cpp
+  effect_pdead.cpp
   enemy.cpp
   main.cpp
   pch.cpp

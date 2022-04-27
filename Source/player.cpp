@@ -55,7 +55,7 @@ PLAYER::PLAYER()
 	count = 0;
 	dcount = 0;
 	s_shot = false;
-
+	effect_pdead = new EFFECT_PDEAD;
 }
 void PLAYER::Move()
 {
@@ -170,7 +170,6 @@ void PLAYER::Move()
 		if(key[KEY_INPUT_UP] !=1 && key[KEY_INPUT_DOWN] != 1) {
 			ycount=0;
 		}
-
 }
 
 /*
@@ -286,7 +285,7 @@ void PLAYER::All()
 	ShotGenerate();
 	ShotMove();
 	Draw();
-
+	effect_pdead->All();
 	++count;
 }
 
@@ -310,6 +309,8 @@ void PLAYER::SetShotFlag(
 void PLAYER::SetDamageFlag()
 {
 	damageflag = true;
+	//消滅エフェクトのフラグを立てる
+	effect_pdead->SetFlag(x, y);
 }
 
 bool PLAYER::GetShotSound()

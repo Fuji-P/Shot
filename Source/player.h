@@ -3,6 +3,8 @@
 * リンク	：https://bituse.info/
 */
 
+#include "effect_pdead.h"
+
 class PLAYER{
 
 private:
@@ -40,6 +42,9 @@ private:
 	//サウンド関連フラグ
 	//ショット音
 	bool s_shot;
+
+	//プレイヤー消滅エフェクトクラス
+	EFFECT_PDEAD *effect_pdead;
 
 private:
 	void Move();

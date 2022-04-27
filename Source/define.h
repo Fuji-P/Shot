@@ -39,6 +39,8 @@
 
 #define EFFECT_EDEADNUM 20
 
+#define EFFECT_PDEADNUM 20
+
 //当たり判定用半径定義
 #define PLAYER_COLLISION 4
 #define ENEMY1_COLLISION 14
@@ -89,4 +91,10 @@ struct ENEMYDATA {
 	int		speed;			//弾スピード
 	int		hp;				//HP
 	int		item;			//アイテム
+};
+
+struct PEFFECT_EXPAND {
+	double x, y;
+	double rad;
+	int speed;
 };
