@@ -41,6 +41,8 @@
 
 #define EFFECT_PDEADNUM 20
 
+#define GRAZE_NUM 25
+
 //当たり判定用半径定義
 #define PLAYER_COLLISION 4
 #define ENEMY1_COLLISION 14
@@ -50,6 +52,7 @@
 #define ESHOT1_COLLISION 3
 #define ESHOT2_COLLISION 2
 
+#define GRAZE_COLLISION 10
 
 //extern宣言してどこからでもアクセスできるようにする
 //key配列
@@ -75,6 +78,7 @@ struct E_SHOT {
 	int		width, height;	//画像の幅と高さ
 	int		pattern;		//ショットパターン
 	int		speed;			//弾スピード
+	bool	gflag;			//グレイズ判定用フラグ
 };
 
 struct ENEMYDATA {
@@ -94,7 +98,7 @@ struct ENEMYDATA {
 };
 
 struct PEFFECT_EXPAND {
-	double x, y;
-	double rad;
-	int speed;
+	double	x, y;
+	double	rad;
+	int		speed;
 };

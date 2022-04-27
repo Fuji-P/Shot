@@ -18,6 +18,11 @@ CONTROL::CONTROL()
 		effect_edead[i] = new EFFECT_EDEAD;
 	}
 
+	//グレイズクラスのインスタンス生成
+	for (int i = 0; i < GRAZE_NUM; ++i) {
+		graze[i] = new GRAZE;
+	}
+
 	//エネミーデータの読み込み
 	ENEMYDATA data[ENEMY_NUM];
 
@@ -47,11 +52,13 @@ CONTROL::CONTROL()
 	s_pdead = LoadSoundMem("playdead.wav");
 	s_eshot = LoadSoundMem("enemyshot.wav");
 	s_pshot = LoadSoundMem("playershot.wav");
+	s_graze = LoadSoundMem("graze.wav");
 
 	edead_flag = false;
 	pdead_flag = false;
 	eshot_flag = false;
 	pshot_flag = false;
+	graze_flag = false;
 }
 
 CONTROL::~CONTROL()
@@ -173,7 +180,11 @@ void CONTROL::All()
 {
 
 	//サウンドフラグを初期化
-	edead_flag = pdead_flag =  eshot_flag = pshot_flag = false;
+	edead_flag = false;
+	pdead_flag = false;
+	eshot_flag = false;
+	pshot_flag = false;
+	graze_flag = false;
 
 	//描画領域を指定
 	SetDrawArea(MARGIN, MARGIN, MARGIN + 380, MARGIN + 460);
@@ -206,6 +217,11 @@ void CONTROL::All()
 //	CollisionAll();
 	CollisionEnemy();
 	CollisionPlayer();
+
+	//グレイズ描画
+	for (int i = 0; i < GRAZE_NUM; ++i) {
+		graze[i]->All();
+	}
 
 	//敵消滅エフェクト
 	for (int i = 0; i < EFFECT_EDEADNUM; ++i) {
@@ -249,6 +265,10 @@ void CONTROL::SoundAll()
 
 	if (pdead_flag) {
 		PlaySoundMem(s_pdead, DX_PLAYTYPE_BACK);
+	}
+
+	if (graze_flag) {
+		PlaySoundMem(s_graze, DX_PLAYTYPE_BACK);
 	}
 
 }
@@ -356,17 +376,32 @@ void CONTROL::CollisionPlayer()
 					break;
 			}
 
-			//当たってれば
-			if (!CircleCollision(PLAYER_COLLISION, eshot_coll, px, ex, py, ey)) {
-				continue;
+			//グレイズ当たり判定フラグがtrueなら
+			if (CircleCollision(GRAZE_COLLISION, eshot_coll, px, ex, py, ey)) {
+				//まだ
+				if (!enemy[i]->GetGrazeFlag(s)) {
+					enemy[i]->SetGrazeFlag(s);
+					//グレイズのインスタンス検索
+					for (int z = 0; z < GRAZE_NUM; ++z) {
+						if (!graze[z]->GetFlag()) {
+							graze[z]->SetFlag(px, py);
+							break;
+						}
+					}
+					//グレイズ音セット
+					graze_flag = true;
+				}
 			}
 
-			//操作キャラのdamageflagを立てる
-			player->SetDamageFlag();
-			//弾を消す
-			enemy[i]->SetShotFlag(s, false);
-			//プレイヤー消滅音フラグを立てる
-			pdead_flag = true;
+			//当たってれば
+			if (CircleCollision(PLAYER_COLLISION, eshot_coll, px, ex, py, ey)) {
+				//操作キャラのdamageflagを立てる
+				player->SetDamageFlag();
+				//弾を消す
+				enemy[i]->SetShotFlag(s, false);
+				//プレイヤー消滅音フラグを立てる
+				pdead_flag = true;
+			}
 		}
 	}
 }

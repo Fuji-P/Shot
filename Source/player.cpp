@@ -202,9 +202,9 @@ void PLAYER::ShotGenerate()
 		shot[i].x = x;
 		shot[i].y = y;
 		break;
-		//ショットサウンドフラグを立てる
-		s_shot = true;
 	}
+	//ショットサウンドフラグを立てる
+	s_shot = true;
 }
 
 void PLAYER::ShotMove()

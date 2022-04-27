@@ -69,6 +69,9 @@ public:
 	bool All();
 	bool GetShotSound();
 	bool GetDeadFlag();
+	bool GetGrazeFlag(
+		int		index
+	);
 	bool GetShotPosition(
 		int		index,
 		double*	x,
@@ -77,6 +80,9 @@ public:
 	void GetPosition(
 		double* x,
 		double* y
+	);
+	void SetGrazeFlag(
+		int		index
 	);
 	void SetDeadFlag();
 	void SetShotFlag(

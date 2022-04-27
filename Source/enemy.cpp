@@ -82,6 +82,7 @@ ENEMY::ENEMY(
 		shot[i].speed = speed;
 		shot[i].x = x;
 		shot[i].y = y;
+		shot[i].gflag = false;
 	}
 
 	count = 0;
@@ -435,9 +436,23 @@ void ENEMY::SetShotFlag(
 	shot[index].flag = flag;
 }
 
+void ENEMY::SetGrazeFlag(
+	int index
+)
+{
+	shot[index].gflag = true;
+}
+
 int ENEMY::GetShotType()
 {
 	return stype;
+}
+
+bool ENEMY::GetGrazeFlag(
+	int index
+)
+{
+	return shot[index].gflag;
 }
 
 bool ENEMY::All()

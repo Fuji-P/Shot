@@ -7,6 +7,7 @@
 #include "enemy.h"
 #include "back.h"
 #include "effect_edead.h"
+#include "graze.h"
 
 class CONTROL{
 
@@ -22,17 +23,22 @@ class CONTROL{
 	//敵消滅エフェクトクラス
 	EFFECT_EDEAD *effect_edead[EFFECT_EDEADNUM];
 
+	//グレイズクラス
+	GRAZE *graze[GRAZE_NUM];
+
 	//サウンドハンドル
 	int s_edead;
 	int s_pdead;
 	int s_eshot;
 	int s_pshot;
+	int s_graze;
 
 	//サウンドを鳴らすかどうかのフラグ
 	bool eshot_flag;
 	bool pshot_flag;
 	bool edead_flag;
 	bool pdead_flag;
+	bool graze_flag;
 
 private:
 	CONTROL();
