@@ -8,6 +8,7 @@
 #include "back.h"
 #include "effect_edead.h"
 #include "graze.h"
+#include "score.h"
 
 class CONTROL{
 
@@ -25,6 +26,9 @@ class CONTROL{
 
 	//グレイズクラス
 	GRAZE *graze[GRAZE_NUM];
+
+	//背景クラス
+	SCORE* score;
 
 	//サウンドハンドル
 	int s_edead;

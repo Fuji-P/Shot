@@ -11,6 +11,7 @@ CONTROL::CONTROL()
 	//プレイヤークラスの生成
 	player = new PLAYER;
 
+	//背景クラスの生成
 	back = new BACK;
 
 	//エフェクトクラスのインスタンス生成
@@ -25,6 +26,9 @@ CONTROL::CONTROL()
 
 	//エネミーデータの読み込み
 	ENEMYDATA data[ENEMY_NUM];
+
+	//スコアクラスの生成
+	score = new SCORE;
 
 	LoadEnemyData(data);
 
@@ -186,10 +190,12 @@ void CONTROL::All()
 	pshot_flag = false;
 	graze_flag = false;
 
-	//描画領域を指定
-	SetDrawArea(MARGIN, MARGIN, MARGIN + 380, MARGIN + 460);
 
 	back->All();
+	score->All();
+
+	//描画領域を指定
+	SetDrawArea(MARGIN, MARGIN, MARGIN + 620, MARGIN + 460);
 
 	//プレイヤークラスのAll関数実行
 	player->All();
@@ -217,6 +223,9 @@ void CONTROL::All()
 //	CollisionAll();
 	CollisionEnemy();
 	CollisionPlayer();
+
+	//ライフは毎回取得
+	score->SetScore(LIFE_SCORE, player->GetLife());
 
 	//グレイズ描画
 	for (int i = 0; i < GRAZE_NUM; ++i) {
@@ -335,6 +344,8 @@ void CONTROL::CollisionEnemy()
 			edead_flag = true;
 			//敵消滅エフェクトセット
 			EnemyDeadEffect(ex, ey);
+			//得点を加える
+			score->SetScore(CURRENT_SCORE, 100);
 		}
 	}
 }
@@ -388,6 +399,9 @@ void CONTROL::CollisionPlayer()
 							break;
 						}
 					}
+					//グレイズの得点を加える
+					score->SetScore(GRAZE_SCORE, 1);
+					score->SetScore(CURRENT_SCORE, 20);
 					//グレイズ音セット
 					graze_flag = true;
 				}

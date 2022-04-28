@@ -54,6 +54,8 @@
 
 #define GRAZE_COLLISION 10
 
+#define SCORE_X 390
+
 //extern宣言してどこからでもアクセスできるようにする
 //key配列
 extern char key[256];

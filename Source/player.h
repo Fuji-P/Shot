@@ -62,6 +62,7 @@ public:
 		double* x,
 		double* y
 	);
+	int GetLife();
 	void GetPosition(
 		double* x,
 		double* y

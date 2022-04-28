@@ -7,5 +7,6 @@
   main.cpp
   pch.cpp
   player.cpp
+  score.cpp
   コードを生成中...
   Shot.vcxproj -> C:\Users\S-SAOTOME\source\repos\Shot\Debug\Shot.exe

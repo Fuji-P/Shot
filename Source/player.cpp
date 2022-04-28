@@ -34,6 +34,7 @@ PLAYER::PLAYER()
 
 	//生きているかどうか
 	damageflag = false;
+	life = 5;
 
 	//弾初期化
 	memset(shot, 0, sizeof(shot));
@@ -309,10 +310,16 @@ void PLAYER::SetShotFlag(
 void PLAYER::SetDamageFlag()
 {
 	damageflag = true;
+	//ライフを減らす
+	--life;
 	//消滅エフェクトのフラグを立てる
 	effect_pdead->SetFlag(x, y);
 }
 
+int PLAYER::GetLife()
+{
+	return life;
+}
 bool PLAYER::GetShotSound()
 {
 	return s_shot;

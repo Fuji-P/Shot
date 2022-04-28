@@ -9,6 +9,7 @@
 BACK::BACK()
 {
 	gh = LoadGraph("back1.png");
+	gh2 = LoadGraph("back2.png");
 
 	x = y = MARGIN;
 
