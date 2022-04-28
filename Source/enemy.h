@@ -90,6 +90,7 @@ public:
 		bool	flag
 	);
 	int GetShotType();
+	int GetItem();
 	ENEMY(
 		int type,
 		int stype,

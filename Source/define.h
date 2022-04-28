@@ -33,7 +33,7 @@
 
 #define ENEMY_SNUM 25
 
-#define ENEMY_NUM 4
+#define ENEMY_NUM 13
 
 #define ENEMY_ANUM 13
 
@@ -55,6 +55,12 @@
 #define GRAZE_COLLISION 10
 
 #define SCORE_X 390
+
+//アイテムの当たり判定用半径
+#define ITEM_COLLISION 16
+
+//アイテムの総数
+#define ITEM_NUM 30
 
 //extern宣言してどこからでもアクセスできるようにする
 //key配列

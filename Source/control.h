@@ -9,6 +9,7 @@
 #include "effect_edead.h"
 #include "graze.h"
 #include "score.h"
+#include "item.h"
 
 class CONTROL{
 
@@ -28,7 +29,10 @@ class CONTROL{
 	GRAZE *graze[GRAZE_NUM];
 
 	//背景クラス
-	SCORE* score;
+	SCORE *score;
+
+	//アイテムクラス
+	ITEM *item[ITEM_NUM];
 
 	//サウンドハンドル
 	int s_edead;
@@ -36,6 +40,7 @@ class CONTROL{
 	int s_eshot;
 	int s_pshot;
 	int s_graze;
+	int s_item;
 
 	//サウンドを鳴らすかどうかのフラグ
 	bool eshot_flag;
@@ -43,6 +48,7 @@ class CONTROL{
 	bool edead_flag;
 	bool pdead_flag;
 	bool graze_flag;
+	bool item_flag;
 
 private:
 	CONTROL();

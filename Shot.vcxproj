@@ -161,6 +161,7 @@
     <ClCompile Include="Source\pch.cpp" />
     <ClCompile Include="Source\player.cpp" />
     <ClCompile Include="Source\score.cpp" />
+    <ClCompile Include="Source\item.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\back.h" />
@@ -170,6 +171,7 @@
     <ClInclude Include="Source\effect_pdead.h" />
     <ClInclude Include="Source\enemy.h" />
     <ClInclude Include="Source\graze.h" />
+    <ClInclude Include="Source\item.h" />
     <ClInclude Include="Source\pch.h" />
     <ClInclude Include="Source\player.h" />
     <ClInclude Include="Source\score.h" />

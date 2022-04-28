@@ -10,7 +10,6 @@ private:
 
 	//グラフィックハンドル
 	int gh;
-	int gh2;
 
 private:
 	void Draw();

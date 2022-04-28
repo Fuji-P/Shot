@@ -448,6 +448,11 @@ int ENEMY::GetShotType()
 	return stype;
 }
 
+int ENEMY::GetItem()
+{
+	return item;
+}
+
 bool ENEMY::GetGrazeFlag(
 	int index
 )

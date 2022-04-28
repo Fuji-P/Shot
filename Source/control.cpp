@@ -32,6 +32,11 @@ CONTROL::CONTROL()
 
 	LoadEnemyData(data);
 
+	//アイテムクラスのインスタンス生成
+	for (int i = 0; i < ITEM_NUM; ++i) {
+		item[i] = new ITEM;
+	}
+
 	//敵クラス生成
 	for (int i = 0; i < ENEMY_NUM; ++i) {
 		enemy[i] = new ENEMY(
@@ -57,12 +62,14 @@ CONTROL::CONTROL()
 	s_eshot = LoadSoundMem("enemyshot.wav");
 	s_pshot = LoadSoundMem("playershot.wav");
 	s_graze = LoadSoundMem("graze.wav");
+	s_item = LoadSoundMem("item.wav");
 
 	edead_flag = false;
 	pdead_flag = false;
 	eshot_flag = false;
 	pshot_flag = false;
 	graze_flag = false;
+	item_flag = false;
 }
 
 CONTROL::~CONTROL()
@@ -92,7 +99,7 @@ void CONTROL::LoadEnemyData(
 )
 {
 	FILE* fp;
-	char buf[100] = "";
+	char buf[200] = "";
 	int chr;
 	int col = 1;
 	int row = 0;
@@ -189,13 +196,12 @@ void CONTROL::All()
 	eshot_flag = false;
 	pshot_flag = false;
 	graze_flag = false;
-
+	item_flag = false;
 
 	back->All();
-	score->All();
 
 	//描画領域を指定
-	SetDrawArea(MARGIN, MARGIN, MARGIN + 620, MARGIN + 460);
+	SetDrawArea(MARGIN, MARGIN, MARGIN + 380, MARGIN + 460);
 
 	//プレイヤークラスのAll関数実行
 	player->All();
@@ -239,6 +245,19 @@ void CONTROL::All()
 		}
 	}
 
+	//アイテム描画
+	for (int i = 0; i < ITEM_NUM; ++i) {
+		if (item[i]->GetFlag()) {
+			item[i]->All();
+		}
+	}
+
+	//描画領域を指定
+	SetDrawArea(0, 0, 640, 480);
+
+	//スコア描画
+	score->All();
+
 	SoundAll();
 	++g_count;
 }
@@ -278,6 +297,10 @@ void CONTROL::SoundAll()
 
 	if (graze_flag) {
 		PlaySoundMem(s_graze, DX_PLAYTYPE_BACK);
+	}
+	
+	if (item_flag) {
+		PlaySoundMem(s_item, DX_PLAYTYPE_BACK);
 	}
 
 }
@@ -346,6 +369,13 @@ void CONTROL::CollisionEnemy()
 			EnemyDeadEffect(ex, ey);
 			//得点を加える
 			score->SetScore(CURRENT_SCORE, 100);
+			//アイテム出現
+			for (int z = 0; z < ITEM_NUM; ++z) {
+				if (!item[z]->GetFlag()) {
+					item[z]->SetFlag(ex, ey, enemy[s]->GetItem());
+					break;
+				}
+			}
 		}
 	}
 }
@@ -354,7 +384,6 @@ void CONTROL::CollisionPlayer()
 {
 	double px, py;
 	double ex, ey;
-	bool tempflag = false;
 
 	//敵の弾と操作キャラとの当たり判定
 	//プレイヤーが生きてれば
@@ -417,6 +446,30 @@ void CONTROL::CollisionPlayer()
 				pdead_flag = true;
 			}
 		}
+	}
+
+	double ix, iy;
+
+	//アイテムとプレイヤーの当たり判定
+	for (int i = 0; i < ITEM_NUM; ++i) {
+		if (!item[i]->GetFlag()) {
+			continue;
+		}
+		item[i]->GetPosition(&ix, &iy);
+		if (!CircleCollision(PLAYER_COLLISION, ITEM_COLLISION, px, ix, py, iy)) {
+			continue;
+		}
+		switch (item[i]->GetType()) {
+			case 0:
+				score->SetScore(CURRENT_SCORE, 300);
+				break;
+			case 1:
+				score->SetScore(POWER_SCORE, 1);
+				break;
+		}
+		item[i]->Delete();
+		//アイテム取得音をセット
+		item_flag = true;
 	}
 }
 
