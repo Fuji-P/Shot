@@ -18,7 +18,7 @@
 #define PLAYER_INITY		400
 #define MARGIN				10		//上下左右の余白
 #define SCROLL_SPEED		1		//背景スクロールスピード
-#define PSHOT_NUM			10		//プレイヤーの最大弾数
+#define PSHOT_NUM			50		//プレイヤーの最大弾数
 #define PSHOT_SPEED			7		//弾の速度
 #define ENEMY_NUM			13		//最大敵数
 #define ENEMY_SNUM			25		//敵の最大弾数
@@ -50,6 +50,8 @@ struct SHOT {
 	int		gh;				//グラフィックハンドル
 	int		width;			//画像の幅
 	int		height;			//画像の高さ
+	double	rad;			//角度
+
 };
 
 struct E_SHOT {

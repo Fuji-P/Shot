@@ -21,6 +21,7 @@ private:
 	int		iy;			//添字用変数
 	int		result;		//添字用変数
 	int		life;		//プレイヤーのライフ
+	int		power;		//プレイヤーのパワー
 	int		dcount;		//ダメージ中のカウント
 	int		count;		//カウント
 	double	x;			//x座標
@@ -32,15 +33,20 @@ private:
 
 private:
 	void Move();
-	void Draw();
 	void Shot();
 	void ShotGenerate();
 	void ShotMove();
+	void Draw();
+	void DrawShot();
+	void DrawPlayer();
 
 public:
 	PLAYER();
 	void All();
 	void SetDamageFlag();
+	void SetPower(
+		int		p
+	);
 	void SetShotFlag(
 		int		index,
 		bool	flag
@@ -57,5 +63,6 @@ public:
 	bool GetShotSound();
 	bool GetDamageFlag();
 	int GetLife();
+	int GetPower();
 
 };

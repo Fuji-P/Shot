@@ -20,7 +20,7 @@ SCORE::SCORE()
 	score = 0;
 	graze = 0;
 	life = 0;
-	power = 0;
+	power = 4;
 
 }
 
@@ -68,6 +68,12 @@ void SCORE::Draw()
 	for (int i = 0; i < num; ++i) {
 		DrawGraph(SCORE_X + 100 + i * 19, 175, g_number[(buf[i] - '0')], TRUE);
 	}
+
+	//ƒpƒ[”•`‰æ
+	num = sprintf(buf, "%d", power);
+	for (int i = 0; i < num; ++i) {
+		DrawGraph(SCORE_X + 100 + i * 19, 205, g_number[(buf[i] - '0')], TRUE);
+	}
 }
 
 void SCORE::SetScore(SCOREDATA data, int val)
@@ -89,6 +95,11 @@ void SCORE::SetScore(SCOREDATA data, int val)
 	case LIFE_SCORE:
 		life = val;
 		break;
+
+	case POWER_SCORE:
+		power = val;
+		break;
+
 	}
 }
 
@@ -111,6 +122,10 @@ int SCORE::GetScore(SCOREDATA data)
 
 	case LIFE_SCORE:
 		return life;
+		break;
+
+	case POWER_SCORE:
+		return power;
 		break;
 	}
 

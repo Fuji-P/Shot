@@ -15,33 +15,33 @@ PLAYER::PLAYER()
 		MSG("エラー発生");
 	}
 
-	width = 29;
-	height = 40;
+	effect_pdead = new EFFECT_PDEAD;
 
-	//移動係数
-//	move = 1.0f;
-	move = 0.5f;
-
-	//横方向と縦方向のカウント数。
-	xcount = 0, ycount = 0;
-
-	//添字用変数
-	ix = 0, iy = 0, result = 0;
-
-	//初期位置
-	x = 180;
-	y = 400;
-
-	//生きているかどうか
-	damageflag = false;
-	life = 5;
+	width		=	29;
+	height		=	40;
+//	move		=	1.0f;	//移動係数
+	move		=	0.5f;	//移動係数
+	xcount		=	0;		//横方向のカウント数。
+	ycount		=	0;		//縦方向のカウント数。
+	ix			=	0;		//添字用変数
+	iy			=	0;		//添字用変数
+	result		=	0;		//添字用変数
+	x			=	180;	//初期位置
+	y			=	400;	//初期位置
+	count		=	0;
+	dcount		=	0;
+	life		=	5;
+	power		=	4;
+	s_shot		=	false;
+	damageflag	=	false;	//生きているかどうか
 
 	//弾初期化
 	memset(shot, 0, sizeof(shot));
 
 	//弾画像読み込み
 	int temp = LoadGraph("shot.png");
-	int w, h;
+	int w = 0;
+	int h = 0;
 	GetGraphSize(temp, &w, &h);
 
 	//フラグを全部falseにしとく
@@ -52,11 +52,6 @@ PLAYER::PLAYER()
 		shot[i].width = w;
 		shot[i].height = h;
 	}
-
-	count = 0;
-	dcount = 0;
-	s_shot = false;
-	effect_pdead = new EFFECT_PDEAD;
 }
 
 void PLAYER::All()
@@ -195,6 +190,7 @@ void PLAYER::Shot()
 void PLAYER::ShotGenerate()
 {
 	s_shot = false;
+	int num = 0;
 
 	if (damageflag) {
 		return;
@@ -211,10 +207,41 @@ void PLAYER::ShotGenerate()
 		if (shot[i].flag) {
 			continue;
 		}
-		shot[i].flag = true;
-		shot[i].x = x;
-		shot[i].y = y;
-		break;
+		if (power < 5) {
+			shot[i].flag = true;
+			shot[i].x = x;
+			shot[i].y = y;
+			shot[i].rad = - M_PI / 2;
+			break;
+
+		}
+		else if (power >= 5) {
+			//0の時が前方発射
+			if (num == 0) {
+				shot[i].flag = true;
+				shot[i].x = x;
+				shot[i].y = y;
+				shot[i].rad = -1.57;
+			}
+			else if (num == 1) {
+				shot[i].flag = true;
+				shot[i].x = x;
+				shot[i].y = y;
+				shot[i].rad = -1.69;
+			}
+			else if (num == 2) {
+				shot[i].flag = true;
+				shot[i].x = x;
+				shot[i].y = y;
+				shot[i].rad = -1.45;
+			}
+
+			++num;
+
+			if (num == 3) {
+				break;
+			}
+		}
 	}
 	//ショットサウンドフラグを立てる
 	s_shot = true;
@@ -228,7 +255,8 @@ void PLAYER::ShotMove()
 		if (!shot[i].flag) {
 			continue;
 		}
-		shot[i].y -= PSHOT_SPEED;
+		shot[i].x += cos(shot[i].rad) * PSHOT_SPEED;
+		shot[i].y += sin(shot[i].rad) * PSHOT_SPEED;
 		//画面の外にはみ出したらフラグを戻す
 		if (shot[i].y < -10) {
 			shot[i].flag = false;
@@ -238,19 +266,23 @@ void PLAYER::ShotMove()
 
 void PLAYER::Draw()
 {
+	DrawShot();
+	DrawPlayer();
+}
+
+void PLAYER::DrawShot()
+{
 	//弾描画
 	for (int i = 0; i < PSHOT_NUM; ++i) {
 		if (!shot[i].flag) {
 			continue;
 		}
-		DrawGraph(
-				shot[i].x - shot[i].width / 2,
-				shot[i].y - shot[i].height / 2,
-				shot[i].gh,
-				TRUE
-				);
+		DrawRotaGraph(shot[i].x, shot[i].y, 1.0, shot[i].rad + (90 * M_PI / 180), shot[i].gh, TRUE);
 	}
+}
 
+void PLAYER::DrawPlayer()
+{
 	//生きてれば描画
 	if (damageflag) {
 //		if (dcount > 20) {
@@ -260,7 +292,7 @@ void PLAYER::Draw()
 			return;
 		}
 //		if (dcount % 2 == 0) {
-		if (dcount / 12  % 2 == 0) {
+		if (dcount / 12 % 2 == 0) {
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 140);
 			DrawGraph(PLAYER_INITX - width / 2, PLAYER_INITY - height / 2 + 60 - (dcount / 3 - 20), gh[1], TRUE);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
@@ -287,7 +319,6 @@ void PLAYER::Draw()
 		DrawGraph(x - width / 2, y - height / 2, gh[result], TRUE);
 	}
 }
-
 void PLAYER::GetPosition(
 	double* x,
 	double* y
@@ -312,6 +343,19 @@ void PLAYER::SetDamageFlag()
 	--life;
 	//消滅エフェクトのフラグを立てる
 	effect_pdead->SetFlag(x, y);
+}
+
+void PLAYER::SetPower(int p)
+{
+	power += p;
+	if (power > 10) {
+		power = 10;
+	}
+}
+
+int PLAYER::GetPower()
+{
+	return power;
 }
 
 int PLAYER::GetLife()
