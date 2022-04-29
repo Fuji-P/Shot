@@ -1,5 +1,6 @@
 ﻿  back.cpp
   ball.cpp
+  boss.cpp
   control.cpp
   effect_edead.cpp
   effect_pdead.cpp

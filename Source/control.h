@@ -10,16 +10,19 @@
 #include "graze.h"
 #include "score.h"
 #include "item.h"
+#include "boss.h"
 
 class CONTROL{
 
-	PLAYER*			player;								//プレイヤークラス
-	BACK*			back;								//背景クラス
-	ENEMY*			enemy[ENEMY_NUM];					//敵クラス
-	EFFECT_EDEAD*	effect_edead[EFFECT_EDEADNUM];		//敵消滅エフェクトクラス
-	GRAZE*			graze[GRAZE_NUM];					//グレイズクラス
-	SCORE*			score;								//背景クラス
-	ITEM*			item[ITEM_NUM];						//アイテムクラス
+	PLAYER* player;									//プレイヤークラス
+	BACK* back;										//背景クラス
+	ENEMY* enemy[ENEMY_NUM];						//敵クラス
+	EFFECT_EDEAD* effect_edead[EFFECT_EDEADNUM];	//敵消滅エフェクトクラス
+	GRAZE* graze[GRAZE_NUM];						//グレイズクラス
+	SCORE* score;									//背景クラス
+	ITEM* item[ITEM_NUM];							//アイテムクラス
+	BOSS* boss;										//ボスクラス
+
 
 	//サウンドハンドル
 	int		s_edead;

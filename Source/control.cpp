@@ -32,6 +32,9 @@ CONTROL::CONTROL()
 		item[i] = new ITEM;
 	}
 
+	//ボスクラスの生成
+	boss = new BOSS;
+
 	//エネミーデータの読み込み
 	ENEMYDATA data[ENEMY_NUM];
 
@@ -110,6 +113,9 @@ CONTROL::~CONTROL()
 			delete item[i];
 		}
 	}
+
+	//ボスクラスの解放
+	delete boss;
 }
 
 void CONTROL::LoadEnemyData(
@@ -266,6 +272,10 @@ void CONTROL::All()
 		if (item[i]->GetFlag()) {
 			item[i]->All();
 		}
+	}
+
+	if (1800 <= g_count) {
+		boss->All();
 	}
 
 	//描画領域を指定

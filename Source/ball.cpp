@@ -49,7 +49,6 @@ void BALL::Move(
 		toggle = false;
 	}
 
-
 	if (toggle) {
 		raise = -2;
 	}
@@ -60,6 +59,7 @@ void BALL::Move(
 
 void BALL::Draw()
 {
+	//’á‘¬
 	DrawRotaGraph(x + BALL_INITX, y + BALL_INITY, 1.0, 0, gh, TRUE);
 	DrawRotaGraph(x - BALL_INITX, y + BALL_INITY, 1.0, 0, gh, TRUE);
 }
@@ -67,5 +67,4 @@ void BALL::Draw()
 double BALL::GetPosition()
 {
 	return y;
-
 }
