@@ -3,7 +3,11 @@
 * リンク	：https://bituse.info/
 */
 
+#ifndef _PLAYER
+#define _PLAYER
+
 #include "effect_pdead.h"
+#include "ball.h"
 
 class PLAYER{
 
@@ -11,6 +15,7 @@ private:
 
 	SHOT			shot[PSHOT_NUM];	//弾
 	EFFECT_PDEAD*	effect_pdead;		//プレイヤー消滅エフェクトクラス
+	BALL			ball;				//ボールクラス
 
 	int		gh[12];		//グラフィックハンドル格納用配列
 	int		width;		//画像幅
@@ -39,7 +44,11 @@ private:
 	void Draw();
 	void DrawShot();
 	void DrawPlayer();
-
+	void Ball();
+	void BallShotSet(
+		int		index
+	);
+	int NearEnemySearch();
 public:
 	PLAYER();
 	void All();
@@ -66,3 +75,5 @@ public:
 	int GetPower();
 
 };
+
+#endif

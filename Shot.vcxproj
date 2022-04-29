@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\back.cpp" />
+    <ClCompile Include="Source\ball.cpp" />
     <ClCompile Include="Source\control.cpp" />
     <ClCompile Include="Source\effect_edead.cpp" />
     <ClCompile Include="Source\effect_pdead.cpp" />
@@ -165,6 +166,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\back.h" />
+    <ClInclude Include="Source\ball.h" />
     <ClInclude Include="Source\control.h" />
     <ClInclude Include="Source\define.h" />
     <ClInclude Include="Source\effect_edead.h" />

@@ -1,4 +1,5 @@
 ﻿  back.cpp
+  ball.cpp
   control.cpp
   effect_edead.cpp
   effect_pdead.cpp

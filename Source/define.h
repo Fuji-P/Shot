@@ -28,6 +28,9 @@
 #define GRAZE_NUM			25
 #define ITEM_NUM			30		//アイテムの総数
 #define SCORE_X				390
+#define BALL_SHAKE			15
+#define BALL_INITX			50
+#define BALL_INITY			30
 
 //当たり判定用半径定義
 #define PLAYER_COLLISION	4

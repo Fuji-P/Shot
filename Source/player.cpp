@@ -61,8 +61,9 @@ void PLAYER::All()
 		Move();
 	}
 	Shot();
-	Draw();
 	effect_pdead->All();
+	Ball();
+	Draw();
 	++count;
 }
 
@@ -261,6 +262,13 @@ void PLAYER::ShotMove()
 		if (shot[i].y < -10) {
 			shot[i].flag = false;
 		}
+	}
+}
+
+void PLAYER::Ball()
+{
+	if (power == 10) {
+		ball.All(x, y);
 	}
 }
 
