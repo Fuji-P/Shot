@@ -8,10 +8,18 @@
 
 BACK::BACK()
 {
+	//âÊëúì«Ç›çûÇ›
 	gh = LoadGraph("back1.png");
 
-	x = y = MARGIN;
+	x = MARGIN;
+	y = MARGIN;
 
+}
+
+void BACK::All()
+{
+	Move();
+	Draw();
 }
 
 void BACK::Draw()
@@ -33,10 +41,4 @@ void BACK::Draw()
 void BACK::Move()
 {
 	y += SCROLL_SPEED;
-}
-
-void BACK::All()
-{
-	Draw();
-	Move();
 }

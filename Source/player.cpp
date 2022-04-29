@@ -58,6 +58,19 @@ PLAYER::PLAYER()
 	s_shot = false;
 	effect_pdead = new EFFECT_PDEAD;
 }
+
+void PLAYER::All()
+{
+	//Á–Å‚µ‚Ä‚È‚¢‚Æ‚«‚¾‚¯ŽÀs
+	if (!damageflag) {
+		Move();
+	}
+	Shot();
+	Draw();
+	effect_pdead->All();
+	++count;
+}
+
 void PLAYER::Move()
 {
 	
@@ -173,12 +186,11 @@ void PLAYER::Move()
 		}
 }
 
-/*
 void PLAYER::Shot()
 {
-
+	ShotGenerate();
+	ShotMove();
 }
-*/
 
 void PLAYER::ShotGenerate()
 {
@@ -276,20 +288,6 @@ void PLAYER::Draw()
 	}
 }
 
-void PLAYER::All()
-{
-	//Á–Å‚µ‚Ä‚È‚¢‚Æ‚«‚¾‚¯ŽÀs
-	if (!damageflag) {
-		Move();
-	}
-//	Shot();
-	ShotGenerate();
-	ShotMove();
-	Draw();
-	effect_pdead->All();
-	++count;
-}
-
 void PLAYER::GetPosition(
 	double* x,
 	double* y
@@ -320,6 +318,7 @@ int PLAYER::GetLife()
 {
 	return life;
 }
+
 bool PLAYER::GetShotSound()
 {
 	return s_shot;
@@ -344,5 +343,4 @@ bool PLAYER::GetShotPosition(
 	else {
 		return false;
 	}
-
 }

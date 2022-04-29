@@ -5,37 +5,28 @@
 
 class ITEM {
 private:
-	//グラフィックハンドル
-	static int gh[2], ghs[2];
 
-	//どっちのアイテムかを示す変数
-	int type;
-
-	//座標
-	double x, y;
-	double prev_y;
-
-	//回転角度
-	double rad;
-
-	//カウント
-	int count;
-
-	//アイテムが落下し始めるフラグ
-	bool fall_flag;
-
-	//出現中かどうかのフラグ
-	bool flag;
+	static	int		gh[2];		//グラフィックハンドル
+	static	int		ghs[2];		//グラフィックハンドル
+			int		type;		//どっちのアイテムかを示す変数
+			int		count;		//カウント
+			double	x;			//座標
+			double	y;			//座標
+			double	prev_y;
+			double	rad;		//回転角度
+			bool	fall_flag;	//アイテムが落下し始めるフラグ
+			bool	flag;		//出現中かどうかのフラグ
 
 private:
 	void Move();
 	void Draw();
+
 public:
 	ITEM();
+	void All();
 	void SetFlag(double x, double y, int type);
-	bool GetFlag();
 	void Delete();
 	void GetPosition(double* x, double* y);
 	int  GetType();
-	void All();
+	bool GetFlag();
 };

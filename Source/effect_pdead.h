@@ -5,40 +5,30 @@
 
 class EFFECT_PDEAD {
 private:
-	//座標
-	double x, y;
 
-	//画像のサイズ
-	int width[3];
-	int height[3];
+	PEFFECT_EXPAND expand[EFFECT_PDEADNUM];		//パーティクルエフェクト構造体
 
-	//グラフィックハンドル
-	int gh[3];
-
-	//拡大率
-	double rate;
-
-	//透明度
-	int alpha;
-
-	//パーティクルエフェクト構造体
-	PEFFECT_EXPAND expand[EFFECT_PDEADNUM];
-
-	//回転させる画像用の角度
-	double rota;
-
-	//カウント
-	int count;
-
-	//実行中かどうかのフラグ
-	bool flag;
+	int		gh[3];		//グラフィックハンドル
+	int		width[3];	//画像のサイズ
+	int		height[3];	//画像のサイズ
+	int		alpha;		//透明度
+	int		count;		//カウント
+	double	rota;		//回転させる画像用の角度
+	double	x;			//座標
+	double	y;			//座標
+	double	rate;		//拡大率
+	bool	flag;		//実行中かどうかのフラグ
 
 private:
 	void Move();
 	void Draw();
+
 public:
 	EFFECT_PDEAD();
-	void SetFlag(double x, double y);
-	bool GetFlag();
 	void All();
+	void SetFlag(
+		double	x, 
+		double	y
+	);
+	bool GetFlag();
 };

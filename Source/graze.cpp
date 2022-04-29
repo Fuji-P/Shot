@@ -10,22 +10,35 @@ int GRAZE::gh;
 
 GRAZE::GRAZE()
 {
-	x, y = 0;
 
-	//èââÒÇæÇØì«Çﬁ
+	//âÊëúì«Ç›çûÇ›.èââÒÇæÇØì«Çﬁ
 	if (gh == 0) {
 		gh = LoadGraph("graze.png");
 	}
 
-	rad = rate = 0;
+	x = 0;
+
+	y = 0;
+
+	rad = 0;
+
+	rate = 0;
 
 	alpha = 255;
 
-	flag = false;
-
 	count = 0;
 
+	flag = false;
+
 	srand((unsigned)time(NULL));
+}
+
+void GRAZE::All()
+{
+	if (flag) {
+		Move();
+		Draw();
+	}
 }
 
 void GRAZE::Move()
@@ -57,15 +70,6 @@ void GRAZE::Draw()
 	DrawRotaGraph(x, y, rate, 1, gh, TRUE);
 
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-}
-
-void GRAZE::All()
-{
-	if (flag) {
-		Move();
-		Draw();
-	}
-
 }
 
 bool GRAZE::GetFlag()

@@ -5,29 +5,16 @@
 
 class EFFECT_EDEAD {
 private:
-	//座標
-	double x, y;
 
-	//グラフィックハンドル
-	static int gh[3];
-
-	//エフェクト画像の角度
-	double rad;
-
-	//拡大率
-	double rate;
-
-	//透明度
-	int alpha;
-
-	//どの画像を使うかの添字
-	int index;
-
-	//カウント
-	int count;
-
-	//実行中かどうかのフラグ
-	bool flag;
+	static	int		gh[3];		//グラフィックハンドル
+			int		alpha;		//透明度
+			int		index;		//どの画像を使うかの添字
+			int		count;		//カウント
+			double	x;			//座標
+			double	y;			//座標
+			double	rad;		//エフェクト画像の角度
+			double	rate;		//拡大率
+			bool	flag;		//実行中かどうかのフラグ
 
 private:
 	void Move();
@@ -35,10 +22,10 @@ private:
 
 public:
 	EFFECT_EDEAD();
-	bool GetFlag();
-	void SetFlag(
-		double x,
-		double y
-	);
 	void All();
+	void SetFlag(
+		double	x,
+		double	y
+	);
+	bool GetFlag();
 };

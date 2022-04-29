@@ -6,33 +6,24 @@
 class GRAZE {
 private:
 
-	//グラフィックハンドル
-	static int gh;
-
-	//座標
-	double x, y;
-
-	//角度
-	double rad;
-
-	//アルファ値
-	int alpha;
-
-	//拡大率
-	double rate;
-
-	//カウント
-	int count;
-
-	//実行中かどうかのフラグ
-	bool flag;
+	static	int		gh;		//グラフィックハンドル
+			int		alpha;	//アルファ値
+			int		count;	//カウント
+			double	x;		//座標
+			double	y;		//座標
+			double	rad;	//角度
+			double	rate;	//拡大率
+			bool	flag;	//実行中かどうかのフラグ
 
 private:
 	void Move();
 	void Draw();
 public:
 	GRAZE();
-	void SetFlag(double x, double y);
-	bool GetFlag();
 	void All();
+	void SetFlag(
+		double	x,
+		double	y
+	);
+	bool GetFlag();
 };

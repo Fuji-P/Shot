@@ -9,72 +9,47 @@
 #include <math.h>
 #include <time.h>
 
-//プレイヤーの歩くスピード
-#define PLAYER_SPEED 4
-
-#define PLAYER_INITX 180
-#define PLAYER_INITY 400
-
 //メッセージボックス
 #define MSG(m) {\
 	MessageBox(NULL,m, "メッセージ", MB_OK);}
 
-//上下左右の余白
-#define MARGIN 10
-
-//背景スクロールスピード
-#define SCROLL_SPEED 1
-
-//最大弾数
-#define PSHOT_NUM 10
-
-//弾の速度
-#define PSHOT_SPEED 7
-
-#define ENEMY_SNUM 25
-
-#define ENEMY_NUM 13
-
-#define ENEMY_ANUM 13
-
-#define EFFECT_EDEADNUM 20
-
-#define EFFECT_PDEADNUM 20
-
-#define GRAZE_NUM 25
+#define PLAYER_SPEED		4		//プレイヤーの歩くスピード
+#define PLAYER_INITX		180
+#define PLAYER_INITY		400
+#define MARGIN				10		//上下左右の余白
+#define SCROLL_SPEED		1		//背景スクロールスピード
+#define PSHOT_NUM			10		//プレイヤーの最大弾数
+#define PSHOT_SPEED			7		//弾の速度
+#define ENEMY_NUM			13		//最大敵数
+#define ENEMY_SNUM			25		//敵の最大弾数
+#define ENEMY_ANUM			13
+#define EFFECT_EDEADNUM		20
+#define EFFECT_PDEADNUM		20
+#define GRAZE_NUM			25
+#define ITEM_NUM			30		//アイテムの総数
+#define SCORE_X				390
 
 //当たり判定用半径定義
-#define PLAYER_COLLISION 4
-#define ENEMY1_COLLISION 14
-
-#define PSHOT_COLLISION 3
-#define ESHOT0_COLLISION 10
-#define ESHOT1_COLLISION 3
-#define ESHOT2_COLLISION 2
-
-#define GRAZE_COLLISION 10
-
-#define SCORE_X 390
-
-//アイテムの当たり判定用半径
-#define ITEM_COLLISION 16
-
-//アイテムの総数
-#define ITEM_NUM 30
+#define PLAYER_COLLISION	4
+#define ENEMY1_COLLISION	14
+#define PSHOT_COLLISION		3
+#define ESHOT0_COLLISION	10
+#define ESHOT1_COLLISION	3
+#define ESHOT2_COLLISION	2
+#define GRAZE_COLLISION		10
+#define ITEM_COLLISION		16		//アイテムの当たり判定用半径
 
 //extern宣言してどこからでもアクセスできるようにする
-//key配列
-extern char key[256];
-
-//ゲームが開始してから何ループしたのか
-extern int g_count;
+extern char	key[256];		//key配列
+extern int	g_count;		//ゲームが開始してから何ループしたのか
 
 struct SHOT {
 	bool	flag;			//弾が発射中かどうか
 	double	x;				//x座標
 	double	y;				//y座標
 	int		gh;				//グラフィックハンドル
-	int		width, height;	//画像の幅と高さ
+	int		width;			//画像の幅
+	int		height;			//画像の高さ
 };
 
 struct E_SHOT {
@@ -83,7 +58,8 @@ struct E_SHOT {
 	double	y;				//y座標
 	double	rad;			//角度(ラジアン)
 	int		gh;				//グラフィックハンドル
-	int		width, height;	//画像の幅と高さ
+	int		width;			//画像の幅
+	int		height;			//画像の高さ
 	int		pattern;		//ショットパターン
 	int		speed;			//弾スピード
 	bool	gflag;			//グレイズ判定用フラグ
@@ -106,7 +82,8 @@ struct ENEMYDATA {
 };
 
 struct PEFFECT_EXPAND {
-	double	x, y;
+	double	x;
+	double	y;
 	double	rad;
 	int		speed;
 };

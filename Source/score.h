@@ -13,16 +13,26 @@ enum SCOREDATA {
 
 class SCORE {
 private:
-	//グラフィックハンドル
-	int g_board[4], g_number[10];
 
-	int high_score, score, graze, life;
+	int	g_board[4];		//グラフィックハンドル
+	int	g_number[10];	//グラフィックハンドル
+	int	high_score;
+	int	score;
+	int	graze;
+	int	life;
+	int	power;
 
 private:
 	void Draw();
+
 public:
-	void SetScore(SCOREDATA data, int val);
-	int GetScore(SCOREDATA data);
-	void All();
 	SCORE();
+	void All();
+	void SetScore(
+		SCOREDATA	data,
+		int			val
+	);
+	int GetScore(
+		SCOREDATA	data
+	);
 };

@@ -11,15 +11,23 @@ int ITEM::ghs[2];
 
 ITEM::ITEM()
 {
+
+	//0が青色で得点系、1が黄色でパワーアップ系
 	if (gh[0] == 0) {
-		//0が青色で得点系、1が黄色でパワーアップ系
 		gh[0] = LoadGraph("item1.png");
 		gh[1] = LoadGraph("item2.png");
+	}
+
+	if (ghs[0] == 0) {
 		ghs[0] = LoadGraph("items1.png");
 		ghs[1] = LoadGraph("items2.png");
-
 	}
-	x = y = 0;
+
+	x = 0;
+	y = 0;
+	prev_y = 0;
+
+	type = 0;
 
 	rad = 0;
 
@@ -29,6 +37,12 @@ ITEM::ITEM()
 
 	flag = false;
 
+}
+
+void ITEM::All()
+{
+	Move();
+	Draw();
 }
 
 void ITEM::Move()
@@ -61,17 +75,17 @@ void ITEM::Move()
 	}
 }
 
+void ITEM::Draw()
+{
+	DrawRotaGraph(x, y, 1.0, rad, gh[type], TRUE);
+	DrawRotaGraph(x, y, 1.0, 0, ghs[type], TRUE);
+}
+
 void ITEM::Delete()
 {
 	count = 0;
 	fall_flag = false;
 	flag = false;
-}
-
-void ITEM::Draw()
-{
-	DrawRotaGraph(x, y, 1.0, rad, gh[type], TRUE);
-	DrawRotaGraph(x, y, 1.0, 0, ghs[type], TRUE);
 }
 
 void ITEM::SetFlag(double x, double y, int type)
@@ -84,24 +98,18 @@ void ITEM::SetFlag(double x, double y, int type)
 	flag = true;
 }
 
-bool ITEM::GetFlag()
-{
-	return flag;
-}
-
 void ITEM::GetPosition(double* x, double* y)
 {
 	*x = this->x;
 	*y = this->y;
 }
 
+bool ITEM::GetFlag()
+{
+	return flag;
+}
+
 int ITEM::GetType()
 {
 	return type;
-}
-
-void ITEM::All()
-{
-	Move();
-	Draw();
 }

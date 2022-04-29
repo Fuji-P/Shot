@@ -5,19 +5,16 @@
 
 class BACK {
 private:
-	//座標
-	double x, y;
 
-	//グラフィックハンドル
-	int gh;
-
-private:
-	void Draw();
+	int		gh;		//グラフィックハンドル
+	double	x;		//座標
+	double	y;		//座標
 
 private:
 	void Move();
+	void Draw();
 
 public:
-	void All();
 	BACK();
+	void All();
 };

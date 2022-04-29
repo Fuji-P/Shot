@@ -8,69 +8,54 @@
 class PLAYER{
 
 private:
-	//x座標,y座標
-	double x,y;
 
-	//画像幅
-	int width,height;
+	SHOT			shot[PSHOT_NUM];	//弾
+	EFFECT_PDEAD*	effect_pdead;		//プレイヤー消滅エフェクトクラス
 
-	//グラフィックハンドル格納用配列
-	int gh[12];
-
-	//移動係数
-	float move;
-
-	//横方向と縦方向のカウント数。
-	int xcount,ycount;
-
-	//添字用変数
-	int ix,iy,result;
-
-	//プレイヤーのライフ
-	int life;
-	bool damageflag;
-	bool endflag;
-	//ダメージ中のカウント
-	int dcount;
-
-	//弾
-	SHOT shot[PSHOT_NUM];
-
-	//カウント
-	int count;
-
-	//サウンド関連フラグ
-	//ショット音
-	bool s_shot;
-
-	//プレイヤー消滅エフェクトクラス
-	EFFECT_PDEAD *effect_pdead;
+	int		gh[12];		//グラフィックハンドル格納用配列
+	int		width;		//画像幅
+	int		height;		//画像幅
+	int		xcount;		//横方向のカウント数。
+	int		ycount;		//縦方向のカウント数。
+	int		ix;			//添字用変数
+	int		iy;			//添字用変数
+	int		result;		//添字用変数
+	int		life;		//プレイヤーのライフ
+	int		dcount;		//ダメージ中のカウント
+	int		count;		//カウント
+	double	x;			//x座標
+	double	y;			//y座標
+	float	move;		//移動係数
+	bool	damageflag;
+	bool	endflag;
+	bool	s_shot;		//サウンド関連フラグショット音
 
 private:
 	void Move();
 	void Draw();
-//	void Shot();
+	void Shot();
 	void ShotGenerate();
 	void ShotMove();
 
 public:
 	PLAYER();
-	bool GetDamageFlag();
-	bool GetShotSound();
-	bool GetShotPosition(
-		int		index,
-		double* x,
-		double* y
-	);
-	int GetLife();
-	void GetPosition(
-		double* x,
-		double* y
-	);
+	void All();
 	void SetDamageFlag();
 	void SetShotFlag(
 		int		index,
 		bool	flag
 	);
-	void All();
+	void GetPosition(
+		double* x,
+		double* y
+	);
+	bool GetShotPosition(
+		int		index,
+		double* x,
+		double* y
+	);
+	bool GetShotSound();
+	bool GetDamageFlag();
+	int GetLife();
+
 };

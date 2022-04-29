@@ -8,51 +8,32 @@
 
 class ENEMY {
 private:
-	//座標とグラフィックハンドル
-	double x, y;
-	int gh[3];
 
-	//画像サイズ
-	int width, height;
+	E_SHOT shot[ENEMY_SNUM];		//弾構造体
 
-	//出現、停止、帰還、発射タイミング
-	int in_time, stop_time, out_time, shot_time;
-
-	//敵の種類
-	int type;
-	//弾の種類
-	int stype;
-	//移動パターン
-	int m_pattern;
-	//ショットパターン
-	int s_pattern;
-
-	//敵が出現してからのカウント
-	int count;
-
-	//HP
-	int hp;
-	//アイテム
-	int item;
-
-	//発射した弾数
-	int num;
-	//発射直後のラジアン
-	double rad;
-
-	//敵消滅フラグ
-	bool deadflag;
-	//敵クラス消滅フラグ
-	bool endflag;
-
-	//弾構造体
-	E_SHOT shot[ENEMY_SNUM];
-	//ショットが撃てるようになったかのフラグ
-	bool sflag;
-	//ショットが打てるようになってからのカウント
-	int scount;
-
-	bool s_shot;
+	int		gh[3];		//グラフィックハンドル
+	int		width;		//画像サイズ
+	int		height;		//画像サイズ
+	int		in_time;	//出現
+	int		stop_time;	//停止
+	int		out_time;	//帰還
+	int		shot_time;	//発射タイミング
+	int		type;		//敵の種類
+	int		stype;		//弾の種類
+	int		m_pattern;	//移動パターン
+	int		s_pattern;	//ショットパターン
+	int		count;		//敵が出現してからのカウント
+	int		hp;			//HP
+	int		item;		//アイテム
+	int		num;		//発射した弾数
+	int		scount;		//ショットが打てるようになってからのカウント
+	double	x;			//座標
+	double	y;			//座標
+	double	rad;		//発射直後のラジアン
+	bool	deadflag;	//敵消滅フラグ
+	bool	endflag;	//敵クラス消滅フラグ
+	bool	sflag;		//ショットが撃てるようになったかのフラグ
+	bool	s_shot;
 
 private:
 	void Move();
@@ -62,10 +43,25 @@ private:
 	void Draw();
 	bool OutCheck();
 	bool ShotOutCheck(
-		int i
+		int	i
 	);
 
 public:
+	ENEMY(
+		int		type,
+		int		stype,
+		int		m_pattern,
+		int		s_pattern,
+		int		in_time,
+		int		stop_time,
+		int		shot_time,
+		int		out_time,
+		int		x,
+		int		y,
+		int		speed,
+		int		hp,
+		int		item
+	);
 	bool All();
 	bool GetShotSound();
 	bool GetDeadFlag();
@@ -91,21 +87,6 @@ public:
 	);
 	int GetShotType();
 	int GetItem();
-	ENEMY(
-		int type,
-		int stype,
-		int m_pattern,
-		int s_pattern,
-		int in_time,
-		int stop_time,
-		int shot_time,
-		int out_time,
-		int x,
-		int y,
-		int speed,
-		int hp,
-		int item
-	);
 };
 
 #endif

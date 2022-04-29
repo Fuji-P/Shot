@@ -24,18 +24,18 @@ CONTROL::CONTROL()
 		graze[i] = new GRAZE;
 	}
 
-	//エネミーデータの読み込み
-	ENEMYDATA data[ENEMY_NUM];
-
 	//スコアクラスの生成
 	score = new SCORE;
-
-	LoadEnemyData(data);
 
 	//アイテムクラスのインスタンス生成
 	for (int i = 0; i < ITEM_NUM; ++i) {
 		item[i] = new ITEM;
 	}
+
+	//エネミーデータの読み込み
+	ENEMYDATA data[ENEMY_NUM];
+
+	LoadEnemyData(data);
 
 	//敵クラス生成
 	for (int i = 0; i < ENEMY_NUM; ++i) {
@@ -77,6 +77,7 @@ CONTROL::~CONTROL()
 	//プレイヤークラスの解放
 	delete player;
 
+	//背景クラスの解放
 	delete back;
 
 	//エネミークラスの解放
@@ -86,10 +87,27 @@ CONTROL::~CONTROL()
 		}
 	}
 
+	//グレイズクラスの解放
+	for (int i = 0; i < GRAZE_NUM; ++i) {
+		if (graze[i] != NULL) {
+			delete graze[i];
+		}
+	}
+
 	//敵消滅エフェクトクラスの解放
 	for (int i = 0; i < EFFECT_EDEADNUM; ++i) {
 		if (effect_edead[i] != NULL) {
 			delete effect_edead[i];
+		}
+	}
+
+	//スコアクラスの解放
+	delete score;
+
+	//アイテムクラスの解放
+	for (int i = 0; i < ITEM_NUM; ++i) {
+		if (item[i] != NULL) {
+			delete item[i];
 		}
 	}
 }
@@ -198,6 +216,7 @@ void CONTROL::All()
 	graze_flag = false;
 	item_flag = false;
 
+	//背景クラスのAll関数実行
 	back->All();
 
 	//描画領域を指定
@@ -226,16 +245,13 @@ void CONTROL::All()
 	}
 
 	//当たり判定
-//	CollisionAll();
-	CollisionEnemy();
-	CollisionPlayer();
-
-	//ライフは毎回取得
-	score->SetScore(LIFE_SCORE, player->GetLife());
+	CollisionAll();
 
 	//グレイズ描画
 	for (int i = 0; i < GRAZE_NUM; ++i) {
-		graze[i]->All();
+		if (graze[i]->GetFlag()) {
+			graze[i]->All();
+		}
 	}
 
 	//敵消滅エフェクト
@@ -305,39 +321,19 @@ void CONTROL::SoundAll()
 
 }
 
-void CONTROL::GetPlayerPosition(
-	double* x,
-	double* y
-)
-{
-	double tempx, tempy;
-
-	player->GetPosition(&tempx, &tempy);
-
-	*x = tempx;
-	*y = tempy;
-}
-
-void CONTROL::GetEnemyPosition(
-	int index,
-	double* x,
-	double* y
-)
-{
-	double tempx, tempy;
-	//指定した添字の敵の座標を取得
-	enemy[index]->GetPosition(&tempx, &tempy);
-
-	//代入
-	*x = tempx;
-	*y = tempy;
-}
-
-/*
 void CONTROL::CollisionAll()
 {
+	CollisionEnemy();
+
+	//プレイヤーが生きてれば
+	if (!player->GetDamageFlag()) {
+		CollisionPlayer();
+		CollisionItem();
+	}
+
+	//ライフは毎回取得
+	score->SetScore(LIFE_SCORE, player->GetLife());
 }
-*/
 
 void CONTROL::CollisionEnemy()
 {
@@ -386,10 +382,6 @@ void CONTROL::CollisionPlayer()
 	double ex, ey;
 
 	//敵の弾と操作キャラとの当たり判定
-	//プレイヤーが生きてれば
-	if (player->GetDamageFlag()) {
-		return;
-	}
 	player->GetPosition(&px, &py);
 	for (int i = 0; i < ENEMY_NUM; ++i) {
 		if (enemy[i] == NULL) {
@@ -447,10 +439,15 @@ void CONTROL::CollisionPlayer()
 			}
 		}
 	}
+}
 
+void CONTROL::CollisionItem()
+{
+	double px, py;
 	double ix, iy;
 
 	//アイテムとプレイヤーの当たり判定
+	player->GetPosition(&px, &py);
 	for (int i = 0; i < ITEM_NUM; ++i) {
 		if (!item[i]->GetFlag()) {
 			continue;
@@ -460,17 +457,45 @@ void CONTROL::CollisionPlayer()
 			continue;
 		}
 		switch (item[i]->GetType()) {
-			case 0:
-				score->SetScore(CURRENT_SCORE, 300);
-				break;
-			case 1:
-				score->SetScore(POWER_SCORE, 1);
-				break;
+		case 0:
+			score->SetScore(CURRENT_SCORE, 300);
+			break;
+		case 1:
+			score->SetScore(POWER_SCORE, 1);
+			break;
 		}
 		item[i]->Delete();
 		//アイテム取得音をセット
 		item_flag = true;
 	}
+}
+
+void CONTROL::GetPlayerPosition(
+	double* x,
+	double* y
+)
+{
+	double tempx, tempy;
+
+	player->GetPosition(&tempx, &tempy);
+
+	*x = tempx;
+	*y = tempy;
+}
+
+void CONTROL::GetEnemyPosition(
+	int index,
+	double* x,
+	double* y
+)
+{
+	double tempx, tempy;
+	//指定した添字の敵の座標を取得
+	enemy[index]->GetPosition(&tempx, &tempy);
+
+	//代入
+	*x = tempx;
+	*y = tempy;
 }
 
 bool CONTROL::CircleCollision(
