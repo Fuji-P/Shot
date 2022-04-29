@@ -15,10 +15,10 @@ BOSS::BOSS()
 	prev_x = 200;
 	prev_y = -100;
 
-	raise = 2;
-	raise2 = 2;
+	raise = 1;
+	raise2 = 1;
 	angle = 0;
-	move_pattern = 0;
+	move_pattern = 3;
 	shot_pattern = 0;
 
 	movex = 0;
@@ -62,21 +62,122 @@ void BOSS::Move()
 {
 
 	switch (move_pattern) {
-	case 0:
-		Appear();
-		break;
-	case 1:
-		MovePattern1();
-		break;
-	case 2:
-	//	MovePattern2();
-		break;
-	case 3:
-	//	MovePattern3();
-		break;
+		case 0:
+			Appear();
+			break;
+		case 1:
+			MovePattern1();
+			break;
+		case 2:
+			MovePattern2();
+			break;
+		case 3:
+			MovePattern3();
+			break;
 	}
 }
 
+void BOSS::Appear()
+{
+	double temp;
+
+	angle += 1;
+
+	temp = sin(angle * M_PI / 180);
+
+	x = 200;
+	y = prev_y + temp * movey;
+
+	//提位置まで移動したら移動パターンを1に変更
+	if (angle == 90) {
+		move_pattern = 3;
+		angle = 0;
+	}
+}
+
+void BOSS::MovePattern1()
+{
+	angle += raise;
+
+	y = 80 + sin(angle * M_PI / 180) * BOSS_SHAKE;
+
+	if (angle == 90) {
+		raise = -1;
+	}
+	else if (angle == -90) {
+		raise = 1;
+	}
+
+	x = 200;
+}
+
+void BOSS::MovePattern2()
+{
+	if (!wait) {
+
+		x += raise2;
+
+		if (x == 70) {
+			raise2 = 1;
+			wait = true;
+		}
+		else if (x == 330) {
+			raise2 = -1;
+			wait = true;
+		}
+	}
+
+	if (wait) {
+		++waitcount;
+		if (waitcount == 20) {
+			wait = false;
+			waitcount = 0;
+		}
+	}
+}
+
+void BOSS::MovePattern3()
+{
+
+	double temp;
+
+	angle += 1;
+
+	temp = sin(angle * M_PI / 180);
+
+	x = prev_x + temp * movex;
+	y = prev_y + temp * movey;
+
+	if (angle == 90) {
+
+		if (p3_state == 0) {
+			MoveInit(70, 80, 1);
+		}
+		else if (p3_state == 1) {
+			MoveInit(200, 160, 2);
+		}
+		else {
+			MoveInit(330, 80, 0);
+		}
+	}
+}
+
+void BOSS::MoveInit(
+	double	bx,
+	double	by,
+	int		state
+)
+{
+	prev_x = x;
+	prev_y = y;
+
+	movex = bx - x;
+	movey = by - y;
+
+	angle = 0;
+
+	p3_state = state;
+}
 void BOSS::Draw()
 {
 	//弾があたったときはダメージ用の画像を描画、
@@ -92,36 +193,3 @@ void BOSS::Draw()
 	damageflag = false;
 }
 
-void BOSS::Appear()
-{
-	double temp;
-
-	angle += 2;
-
-	temp = sin(angle * M_PI / 180);
-
-	x = 200;
-	y = prev_y + temp * movey;
-
-	//提位置まで移動したら移動パターンを1に変更
-	if (angle == 90) {
-		move_pattern = 1;
-		angle = 0;
-	}
-}
-
-void BOSS::MovePattern1()
-{
-	angle += raise;
-
-	y = 80 + sin(angle * M_PI / 180) * BOSS_SHAKE;
-
-	if (angle == 90) {
-		raise = -2;
-	}
-	else if (angle == -90) {
-		raise = 2;
-	}
-
-	x = 200;
-}

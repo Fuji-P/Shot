@@ -274,9 +274,9 @@ void CONTROL::All()
 		}
 	}
 
-	if (1800 <= g_count) {
+//	if (1800 <= g_count) {
 		boss->All();
-	}
+//	}
 
 	//•`‰æ—Ìˆæ‚ðŽw’è
 	SetDrawArea(0, 0, 640, 480);
