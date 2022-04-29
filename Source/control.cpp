@@ -250,6 +250,13 @@ void CONTROL::All()
 		}
 	}
 
+	//	if (1800 <= g_count) {
+	boss->All();
+	if (boss->GetShotSound()) {
+		eshot_flag = true;
+	}
+	//	}
+
 	//“–‚½‚è”»’è
 	CollisionAll();
 
@@ -273,10 +280,6 @@ void CONTROL::All()
 			item[i]->All();
 		}
 	}
-
-//	if (1800 <= g_count) {
-		boss->All();
-//	}
 
 	//•`‰æ—Ìˆæ‚ðŽw’è
 	SetDrawArea(0, 0, 640, 480);

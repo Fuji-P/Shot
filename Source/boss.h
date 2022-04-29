@@ -16,6 +16,8 @@ class BOSS {
 	int		raise2;				//横移動時の増加量
 	int		waitcount;
 	int		p3_state;
+	int		count;				//敵が出現してからのカウント
+	int		scount;				//ショットが打てるようになってからのカウント
 	double	x;					//座標
 	double	y;					//座標
 	double	prev_x;				//座標
@@ -24,7 +26,9 @@ class BOSS {
 	double	movey;				//次の移動場所までの距離
 	bool	damageflag;			//ダメージを負ったかどうかのフラグ
 	bool	flag;				//生きてるかどうかのフラグ
+	bool	shotflag;
 	bool	wait;
+	bool	s_shot;
 
 private:
 	void Move();
@@ -38,6 +42,12 @@ private:
 		double	by,
 		int		state
 	);
+	void Shot();
+	int ShotSearch();
+	bool ShotOutCheck(
+		int	i
+	);
+
 public:
 	BOSS();
 	void All();
@@ -46,4 +56,5 @@ public:
 		bool	f
 	);
 	bool GetFlag();
+	bool GetShotSound();
 };

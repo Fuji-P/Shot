@@ -12,7 +12,7 @@
 #include "item.h"
 #include "boss.h"
 
-class CONTROL{
+class CONTROL {
 
 	PLAYER* player;									//プレイヤークラス
 	BACK* back;										//背景クラス
