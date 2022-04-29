@@ -20,7 +20,7 @@ SCORE::SCORE()
 	score = 0;
 	graze = 0;
 	life = 0;
-	power = 4;
+	power = 10;
 
 }
 

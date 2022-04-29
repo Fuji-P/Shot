@@ -54,7 +54,7 @@ struct SHOT {
 	int		width;			//‰æ‘œ‚Ì•
 	int		height;			//‰æ‘œ‚Ì‚‚³
 	double	rad;			//Šp“x
-
+	int		type;			//’e‚Ìí—Ş(0‚È‚ç’ÊíA1‚È‚ç’ÇÕ’e)
 };
 
 struct E_SHOT {

@@ -67,7 +67,7 @@ public:
 		double*	x,
 		double*	y
 	);
-	void GetEnemyPosition(
+	bool GetEnemyPosition(
 		int		index,
 		double* x,
 		double* y

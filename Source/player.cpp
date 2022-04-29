@@ -5,6 +5,7 @@
 
 #include "pch.h"
 #include "player.h"
+#include "control.h"
 
 PLAYER::PLAYER()
 {
@@ -31,7 +32,7 @@ PLAYER::PLAYER()
 	count		=	0;
 	dcount		=	0;
 	life		=	5;
-	power		=	4;
+	power		=	10;
 	s_shot		=	false;
 	damageflag	=	false;	//生きているかどうか
 
@@ -214,9 +215,8 @@ void PLAYER::ShotGenerate()
 			shot[i].y = y;
 			shot[i].rad = - M_PI / 2;
 			break;
-
 		}
-		else if (power >= 5) {
+		else if (power >= 5 && power < 10) {
 			//0の時が前方発射
 			if (num == 0) {
 				shot[i].flag = true;
@@ -243,6 +243,39 @@ void PLAYER::ShotGenerate()
 				break;
 			}
 		}
+		else if (power == 10) {
+			//0の時が前方発射
+			if (num == 0) {
+				shot[i].flag = true;
+				shot[i].x = x;
+				shot[i].y = y;
+				shot[i].rad = -1.57;
+				shot[i].type = 0;
+			}
+			else if (num == 1) {
+				shot[i].flag = true;
+				shot[i].x = x;
+				shot[i].y = y;
+				shot[i].rad = -1.69;
+				shot[i].type = 0;
+			}
+			else if (num == 2) {
+				shot[i].flag = true;
+				shot[i].x = x;
+				shot[i].y = y;
+				shot[i].rad = -1.45;
+				shot[i].type = 0;
+			}
+			else if (num > 2) {
+				BallShotSet(i);
+			}
+
+			++num;
+
+			if (num == 5) {
+				break;
+			}
+		}
 	}
 	//ショットサウンドフラグを立てる
 	s_shot = true;
@@ -250,14 +283,44 @@ void PLAYER::ShotGenerate()
 
 void PLAYER::ShotMove()
 {
+	//一番近い敵との角度
+	double trad;
+	//一番近い敵の添え字
+	int index;
+	double ex, ey;
+	//controlクラスの参照変数
+	CONTROL& control = CONTROL::GetInstance();
+
+	//一番近い敵の添え字取得
+	index = NearEnemySearch();
+
 	//弾を移動させる処理
 	for (int i = 0; i < PSHOT_NUM; ++i) {
 		//発射してる弾だけ
 		if (!shot[i].flag) {
 			continue;
 		}
-		shot[i].x += cos(shot[i].rad) * PSHOT_SPEED;
-		shot[i].y += sin(shot[i].rad) * PSHOT_SPEED;
+		if (shot[i].type == 0) {
+			shot[i].x += cos(shot[i].rad) * PSHOT_SPEED;
+			shot[i].y += sin(shot[i].rad) * PSHOT_SPEED;
+
+		}
+		else if (shot[i].type == 1) {
+
+			//戻り値が-1なら敵はもう居ないので、まっすぐ前に発射
+			if (index == -1) {
+				trad = -M_PI / 2;
+			}
+			else {
+				//一番近い敵との角度を取得
+				control.GetEnemyPosition(index, &ex, &ey);
+				trad = atan2(ey - shot[i].y, ex - shot[i].x);
+			}
+
+			shot[i].rad = trad;
+			shot[i].x += cos(trad) * PSHOT_SPEED;
+			shot[i].y += sin(trad) * PSHOT_SPEED;
+		}
 		//画面の外にはみ出したらフラグを戻す
 		if (shot[i].y < -10) {
 			shot[i].flag = false;
@@ -269,6 +332,44 @@ void PLAYER::Ball()
 {
 	if (power == 10) {
 		ball.All(x, y);
+	}
+}
+
+void PLAYER::BallShotSet(int index)
+{
+	double ty;
+	double trad, ex, ey;
+	static 	int toggle = 1;
+	int tindex;
+
+	CONTROL& control = CONTROL::GetInstance();
+
+
+	ty = ball.GetPosition();
+
+
+	tindex = NearEnemySearch();
+	//戻り値が-1なら敵はもう居ないので、まっすぐ前に発射
+	if (tindex == -1) {
+		trad = -M_PI / 2;
+	}
+	else {
+		//一番近い敵と弾との角度を取得
+		control.GetEnemyPosition(tindex, &ex, &ey);
+		trad = atan2(ey - ty + BALL_INITY, ex - x + (toggle * BALL_INITX));
+	}
+
+	shot[index].flag = true;
+	shot[index].x = x + BALL_INITX * toggle;
+	shot[index].y = ty + BALL_INITY;
+	shot[index].rad = trad;
+	shot[index].type = 1;
+
+	if (toggle == 1) {
+		toggle = -1;
+	}
+	else {
+		toggle = 1;
 	}
 }
 
@@ -369,6 +470,37 @@ int PLAYER::GetPower()
 int PLAYER::GetLife()
 {
 	return life;
+}
+
+int PLAYER::NearEnemySearch()
+{
+
+	CONTROL& control = CONTROL::GetInstance();
+	int nearindex = -1;
+	double nearresult = 0;
+	double ex, ey, tx, ty;
+
+	for (int i = 0; i < ENEMY_NUM; ++i) {
+		if (!control.GetEnemyPosition(i, &ex, &ey)) {
+			continue;
+		}
+
+		tx = ex - x;
+		ty = ey - y;
+
+		if (nearindex == -1) {
+			nearindex = i;
+			nearresult = tx * tx + ty * ty;
+			continue;
+		}
+
+		//比較して小さければそれを最小値とする
+		if (nearresult > tx * tx + ty * ty) {
+			nearindex = i;
+			nearresult = tx * tx + ty * ty;
+		}
+	}
+	return nearindex;
 }
 
 bool PLAYER::GetShotSound()
