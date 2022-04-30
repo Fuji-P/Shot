@@ -19,7 +19,7 @@ BOSS::BOSS()
 	raise2 = 1;
 	angle = 0;
 	move_pattern = 0;
-	shot_pattern = 1;
+	shot_pattern = 2;
 
 	movex = 0;
 	movey = 180;
@@ -101,8 +101,10 @@ void BOSS::Appear()
 
 	//提位置まで移動したら移動パターンを1に変更
 	if (angle == 90) {
-		move_pattern = 1;
+		move_pattern = 3;
 		angle = 0;
+		prev_x = x;
+		prev_y = y;
 		shotflag = true;
 	}
 }
@@ -153,7 +155,7 @@ void BOSS::MovePattern3()
 
 	double temp;
 
-	angle += 1;
+	angle += 0.5;
 
 	temp = sin(angle * M_PI / 180);
 
@@ -287,6 +289,7 @@ void BOSS::Shot()
 			}
 			if ((index = ShotSearch()) != -1) {
 				shot[index].gh = gh_shot[2];
+//				shot[index].speed = 4;
 				shot[index].speed = 2;
 				shot[index].rad = atan2(py - y, px - x) + (rand() % 41 - 20) * M_PI / 180;
 				shot[index].pattern = 1;
@@ -295,6 +298,24 @@ void BOSS::Shot()
 			break;
 
 		case 2:
+//			if (scount % 10 == 0) {
+			if (scount % 20 != 0) {
+				break;
+			}
+			trad = atan2(py - y, px - x);
+			while ((index = ShotSearch()) != -1) {
+				shot[index].gh = gh_shot[0];
+//				shot[index].speed = 5;
+				shot[index].speed = 2;
+				shot[index].rad = trad + num * ((360 / 20) * M_PI / 180);
+				shot[index].pattern = 2;
+				++num;
+				if (num == 20) {
+					break;
+				}
+				s_shot = true;
+			}
+
 			break;
 		case 3:
 			break;
@@ -317,13 +338,10 @@ void BOSS::Shot()
 				break;
 
 			case 1:
+			case 2:
+			case 3:
 				shot[i].x += shot[i].speed * cos(shot[i].rad);
 				shot[i].y += shot[i].speed * sin(shot[i].rad);
-				break;
-
-			case 2:
-				break;
-			case 3:
 				break;
 		}
 

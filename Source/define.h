@@ -41,7 +41,7 @@
 #define ESHOT2_COLLISION	2
 #define GRAZE_COLLISION		10
 #define ITEM_COLLISION		16		//アイテムの当たり判定用半径
-#define BOSS_SHOTNUM		100
+#define BOSS_SHOTNUM		200
 #define BOSS_SHAKE			20
 
 //extern宣言してどこからでもアクセスできるようにする

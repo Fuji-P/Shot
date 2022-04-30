@@ -11,7 +11,7 @@ class BOSS {
 	int		gh_shot[3];			//グラフィックハンドル
 	int		move_pattern;		//現在の移動パターン
 	int		shot_pattern;		//現在のショットパターン
-	int		angle;				//合計角度
+	double	angle;				//合計角度
 	int		raise;				//増加量
 	int		raise2;				//横移動時の増加量
 	int		waitcount;
