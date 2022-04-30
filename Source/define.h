@@ -83,7 +83,7 @@ struct ENEMYDATA {
 	int		out_time;		//帰還時間
 	int		x;				//x座標
 	int		y;				//y座標
-	int		speed;			//弾スピード
+	double	speed;			//弾スピード
 	int		hp;				//HP
 	int		item;			//アイテム
 };

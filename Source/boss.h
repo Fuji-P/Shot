@@ -18,6 +18,7 @@ class BOSS {
 	int		p3_state;
 	int		count;				//敵が出現してからのカウント
 	int		scount;				//ショットが打てるようになってからのカウント
+	int		temp_scount;
 	double	x;					//座標
 	double	y;					//座標
 	double	prev_x;				//座標

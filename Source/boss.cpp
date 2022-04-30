@@ -19,7 +19,7 @@ BOSS::BOSS()
 	raise2 = 1;
 	angle = 0;
 	move_pattern = 0;
-	shot_pattern = 2;
+	shot_pattern = 3;
 
 	movex = 0;
 	movey = 180;
@@ -28,6 +28,7 @@ BOSS::BOSS()
 	p3_state = 0;
 	scount = 0;
 	count = 0;
+	temp_scount = 0;
 
 	wait = false;
 	damageflag = false;
@@ -101,7 +102,7 @@ void BOSS::Appear()
 
 	//提位置まで移動したら移動パターンを1に変更
 	if (angle == 90) {
-		move_pattern = 3;
+		move_pattern = 1;
 		angle = 0;
 		prev_x = x;
 		prev_y = y;
@@ -306,7 +307,7 @@ void BOSS::Shot()
 			while ((index = ShotSearch()) != -1) {
 				shot[index].gh = gh_shot[0];
 //				shot[index].speed = 5;
-				shot[index].speed = 2;
+				shot[index].speed = 2.5;
 				shot[index].rad = trad + num * ((360 / 20) * M_PI / 180);
 				shot[index].pattern = 2;
 				++num;
@@ -315,9 +316,59 @@ void BOSS::Shot()
 				}
 				s_shot = true;
 			}
-
 			break;
+
 		case 3:
+//			if (scount % 15 == 0) {
+			if (scount % 30 == 0) {
+				while ((index = ShotSearch()) != -1) {
+					shot[index].gh = gh_shot[0];
+//					shot[index].speed = 3;
+					shot[index].speed = 1.5;
+					shot[index].pattern = 3;
+					shot[index].rad = ((360 / 20) * M_PI / 180) * num + ((scount / 15) * 0.08);
+
+					++num;
+
+					if (num == 20) {
+						break;
+					}
+					s_shot = true;
+				}
+			}
+
+			num = 0;
+
+//			if (scount % 5 == 0 && temp_scount <= scount) {
+			if (scount % 10 == 0 && temp_scount <= scount) {
+				while ((index = ShotSearch()) != -1) {
+					shot[index].gh = gh_shot[1];
+//					shot[index].speed = 6;
+					shot[index].speed = 3;
+					shot[index].pattern = 3;
+					if (num == 0) {
+						shot[index].x = x - 50;
+						shot[index].rad = atan2(py - y, px - (x - 50));
+					}
+					else if (num == 1) {
+						shot[index].x = x + 50;
+						shot[index].rad = atan2(py - y, px - (x + 50));
+					}
+
+					++num;
+
+					if (num == 2) {
+
+						//5発分打ち終わったら、60ループ(一秒間)停止
+						if (temp_scount + 40 == scount) {
+							temp_scount += 120;
+						}
+						break;
+					}
+
+					s_shot = true;
+				}
+			}
 			break;
 	}
 
