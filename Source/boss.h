@@ -27,7 +27,7 @@ class BOSS {
 	double	movex;				//次の移動場所までの距離
 	double	movey;				//次の移動場所までの距離
 	bool	damageflag;			//ダメージを負ったかどうかのフラグ
-	bool	flag;				//生きてるかどうかのフラグ
+	static	bool	flag;				//生きてるかどうかのフラグ
 	bool	shotflag;
 	bool	wait;
 	bool	s_shot;

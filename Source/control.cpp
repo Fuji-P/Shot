@@ -223,11 +223,11 @@ void CONTROL::All()
 	item_flag = false;
 
 
-	//背景クラスのAll関数実行
-	back->All();
-
 	//描画領域を指定
 	SetDrawArea(MARGIN, MARGIN, MARGIN + 380, MARGIN + 460);
+
+	//背景クラスのAll関数実行
+	back->All();
 
 	//プレイヤークラスのAll関数実行
 	player->All();
@@ -253,8 +253,8 @@ void CONTROL::All()
 			}
 		}
 		//敵との当たり判定
-		EnemyCollisionAll();
 		CollisionEnemy();
+		EnemyCollisionAll();
 	}
 	else {
 		//	if (1800 <= g_count) {
@@ -263,8 +263,8 @@ void CONTROL::All()
 			eshot_flag = true;
 		}
 		//ボスとの当たり判定
-		BossCollisionAll();
 		CollisionBoss();
+		BossCollisionAll();
 		//	}
 	}
 
@@ -425,7 +425,7 @@ void CONTROL::CollisionBoss()
 
 		//当たり判定
 //		if (CircleCollision(PSHOT_COLLISION, BOSS_COLLISION, px, bx, py, by)) {
-		if (CircleCollision(PSHOT_COLLISION, BOSS_COLLISION, px, bx, py, by)) {
+		if (!CircleCollision(PSHOT_COLLISION, BOSS_COLLISION, px, bx, py, by)) {
 			continue;
 		}
 

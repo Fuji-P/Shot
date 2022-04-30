@@ -6,6 +6,7 @@
 #include "pch.h"
 #include "control.h"
 
+bool BOSS::flag = true;
 //コンストラクタ
 BOSS::BOSS()
 {
@@ -34,7 +35,6 @@ BOSS::BOSS()
 
 	wait = false;
 	damageflag = false;
-	flag = true;
 	shotflag = false;
 	s_shot = false;
 
@@ -452,7 +452,7 @@ void BOSS::SetFlag(
 	bool	flag
 )
 {
-	flag = flag;
+	this->flag = flag;
 }
 
 void BOSS::SetShotFlag(
