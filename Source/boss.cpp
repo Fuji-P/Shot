@@ -19,7 +19,7 @@ BOSS::BOSS()
 	raise2 = 1;
 	angle = 0;
 	move_pattern = 0;
-	shot_pattern = 0;
+	shot_pattern = 1;
 
 	movex = 0;
 	movey = 180;
@@ -281,7 +281,19 @@ void BOSS::Shot()
 			break;
 
 		case 1:
+//			if (scount % 5 == 0) {
+			if (scount % 10 != 0) {
+				break;
+			}
+			if ((index = ShotSearch()) != -1) {
+				shot[index].gh = gh_shot[2];
+				shot[index].speed = 2;
+				shot[index].rad = atan2(py - y, px - x) + (rand() % 41 - 20) * M_PI / 180;
+				shot[index].pattern = 1;
+				s_shot = true;
+			}
 			break;
+
 		case 2:
 			break;
 		case 3:
@@ -303,8 +315,12 @@ void BOSS::Shot()
 				}
 
 				break;
+
 			case 1:
+				shot[i].x += shot[i].speed * cos(shot[i].rad);
+				shot[i].y += shot[i].speed * sin(shot[i].rad);
 				break;
+
 			case 2:
 				break;
 			case 3:
