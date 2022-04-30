@@ -6,10 +6,10 @@
   effect_pdead.cpp
   enemy.cpp
   graze.cpp
+  item.cpp
   main.cpp
   pch.cpp
   player.cpp
   score.cpp
-  item.cpp
   コードを生成中...
   Shot.vcxproj -> C:\Users\S-SAOTOME\source\repos\Shot\Debug\Shot.exe

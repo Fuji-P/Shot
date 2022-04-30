@@ -256,6 +256,7 @@ void BOSS::Shot()
 				shot[index].gh = gh_shot[1];
 				shot[index].pattern = 0;
 				shot[index].speed = 3;
+				shot[index].type = 2;
 
 				if (num == 0) {
 					shot[index].rad = trad - (10 * M_PI / 180);
@@ -294,6 +295,7 @@ void BOSS::Shot()
 				shot[index].speed = 2;
 				shot[index].rad = atan2(py - y, px - x) + (rand() % 41 - 20) * M_PI / 180;
 				shot[index].pattern = 1;
+				shot[index].type = 3;
 				s_shot = true;
 			}
 			break;
@@ -310,6 +312,7 @@ void BOSS::Shot()
 				shot[index].speed = 2.5;
 				shot[index].rad = trad + num * ((360 / 20) * M_PI / 180);
 				shot[index].pattern = 2;
+				shot[index].type = 1;
 				++num;
 				if (num == 20) {
 					break;
@@ -327,6 +330,7 @@ void BOSS::Shot()
 					shot[index].speed = 1.5;
 					shot[index].pattern = 3;
 					shot[index].rad = ((360 / 20) * M_PI / 180) * num + ((scount / 15) * 0.08);
+					shot[index].type = 1;
 
 					++num;
 
@@ -346,6 +350,8 @@ void BOSS::Shot()
 //					shot[index].speed = 6;
 					shot[index].speed = 3;
 					shot[index].pattern = 3;
+					shot[index].type = 2;
+
 					if (num == 0) {
 						shot[index].x = x - 50;
 						shot[index].rad = atan2(py - y, px - (x - 50));
@@ -432,9 +438,55 @@ int BOSS::ShotSearch()
 	return i;
 }
 
+void BOSS::SetShotFlag(
+	int		index,
+	bool	flag
+)
+{
+	shot[index].flag = flag;
+}
+
+void BOSS::SetGrazeFlag(
+	int index
+)
+{
+	shot[index].gflag = true;
+}
+
+bool BOSS::GetGrazeFlag(
+	int index
+)
+{
+	return shot[index].gflag;
+}
+
+bool BOSS::GetShotPosition(
+	int		index,
+	double*	x,
+	double*	y,
+	int*	type
+)
+{
+	if (shot[index].flag) {
+		*x = shot[index].x;
+		*y = shot[index].y;
+		*type = shot[index].type;
+		return true;
+	}
+	else {
+		return false;
+	}
+
+}
+
 bool BOSS::GetShotSound()
 {
 	return s_shot;
+}
+
+bool BOSS::GetFlag()
+{
+	return flag;
 }
 
 bool BOSS::ShotOutCheck(

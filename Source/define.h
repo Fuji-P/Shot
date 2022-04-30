@@ -70,6 +70,7 @@ struct E_SHOT {
 	int		pattern;		//ショットパターン
 	int		speed;			//弾スピード
 	bool	gflag;			//グレイズ判定用フラグ
+	int		type;			//弾の種類(1,2,3)
 };
 
 struct ENEMYDATA {

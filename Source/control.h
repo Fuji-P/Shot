@@ -53,7 +53,8 @@ private:
 	void SoundAll();
 	void CollisionAll();
 	void CollisionEnemy();
-	void CollisionPlayer();
+	void EnemyCollisionAll();
+	void BossCollisionAll();
 	void CollisionItem();
 	bool CircleCollision(
 		double	c1,
@@ -63,6 +64,15 @@ private:
 		double	cy1,
 		double	cy2
 	);
+	void GetShotCollType(
+		int	shottype,
+		int	eshot_coll
+	);
+	void PlusGrazeScore(
+		double px,
+		double py
+	);
+
 
 public:
 	void All();

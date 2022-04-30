@@ -53,9 +53,23 @@ public:
 	BOSS();
 	void All();
 	void SetDamageFlag();
-	void SetFlag(
-		bool	f
+	void SetShotFlag(
+		int		index,
+		bool	flag
+	);
+	void SetGrazeFlag(
+		int		index
+	);
+	bool GetGrazeFlag(
+		int		index
+	);
+	bool GetShotPosition(
+		int		index,
+		double*	x,
+		double*	y,
+		int*	type
 	);
 	bool GetFlag();
 	bool GetShotSound();
+
 };
