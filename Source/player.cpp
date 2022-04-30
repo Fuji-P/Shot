@@ -317,6 +317,12 @@ void PLAYER::ShotMove()
 				trad = atan2(ey - shot[i].y, ex - shot[i].x);
 			}
 
+			//ボスがいる場合はボスとの角度を取得
+			if (control.GetBossFlag()) {
+				control.GetBossPosition(&ex, &ey);
+				trad = atan2(ey - shot[i].y, ex - shot[i].x);
+			}
+
 			shot[i].rad = trad;
 			shot[i].x += cos(trad) * PSHOT_SPEED;
 			shot[i].y += sin(trad) * PSHOT_SPEED;

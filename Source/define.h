@@ -43,6 +43,7 @@
 #define ITEM_COLLISION		16		//アイテムの当たり判定用半径
 #define BOSS_SHOTNUM		200
 #define BOSS_SHAKE			20
+#define BOSS_COLLISION		60
 
 //extern宣言してどこからでもアクセスできるようにする
 extern char	key[256];		//key配列

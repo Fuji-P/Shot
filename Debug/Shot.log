@@ -1,15 +1,2 @@
-﻿  back.cpp
-  ball.cpp
-  boss.cpp
-  control.cpp
-  effect_edead.cpp
-  effect_pdead.cpp
-  enemy.cpp
-  graze.cpp
-  item.cpp
-  main.cpp
-  pch.cpp
-  player.cpp
-  score.cpp
-  コードを生成中...
+﻿  control.cpp
   Shot.vcxproj -> C:\Users\S-SAOTOME\source\repos\Shot\Debug\Shot.exe

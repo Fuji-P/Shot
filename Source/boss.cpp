@@ -30,6 +30,8 @@ BOSS::BOSS()
 	count = 0;
 	temp_scount = 0;
 
+	hp = 500;
+
 	wait = false;
 	damageflag = false;
 	flag = true;
@@ -437,6 +439,21 @@ int BOSS::ShotSearch()
 
 	return i;
 }
+void BOSS::GetPosition(
+	double* x,
+	double* y
+)
+{
+	*x = this->x;
+	*y = this->y;
+
+}
+void BOSS::SetFlag(
+	bool	flag
+)
+{
+	flag = flag;
+}
 
 void BOSS::SetShotFlag(
 	int		index,
@@ -500,4 +517,13 @@ bool BOSS::ShotOutCheck(
 	else {
 		return false;
 	}
+}
+
+int BOSS::HpSet(
+	int damage
+)
+{
+	hp -= damage;
+
+	return hp;
 }

@@ -53,6 +53,7 @@ private:
 	void SoundAll();
 	void CollisionAll();
 	void CollisionEnemy();
+	void CollisionBoss();
 	void EnemyCollisionAll();
 	void BossCollisionAll();
 	void CollisionItem();
@@ -77,9 +78,16 @@ private:
 public:
 	void All();
 	void GetPlayerPosition(
-		double*	x,
-		double*	y
+		double* x,
+		double* y
 	);
+	void GetBossPosition(
+		double* x,
+		double* y
+	);
+
+	bool GetBossFlag();
+
 	bool GetEnemyPosition(
 		int		index,
 		double* x,

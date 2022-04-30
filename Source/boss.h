@@ -19,6 +19,7 @@ class BOSS {
 	int		count;				//敵が出現してからのカウント
 	int		scount;				//ショットが打てるようになってからのカウント
 	int		temp_scount;
+	int		hp;
 	double	x;					//座標
 	double	y;					//座標
 	double	prev_x;				//座標
@@ -52,10 +53,16 @@ private:
 public:
 	BOSS();
 	void All();
-	void SetDamageFlag();
+	void SetFlag(
+		bool	flag
+	);
 	void SetShotFlag(
 		int		index,
 		bool	flag
+	);
+	void GetPosition(
+		double* x,
+		double* y
 	);
 	void SetGrazeFlag(
 		int		index
@@ -71,5 +78,8 @@ public:
 	);
 	bool GetFlag();
 	bool GetShotSound();
+	int HpSet(
+		int damage
+	);
 
 };

@@ -77,11 +77,11 @@ CONTROL::CONTROL()
 
 CONTROL::~CONTROL()
 {
-	//プレイヤークラスの解放
-	delete player;
-
 	//背景クラスの解放
 	delete back;
+
+	//プレイヤークラスの解放
+	delete player;
 
 	//エネミークラスの解放
 	for (int i = 0; i < ENEMY_NUM; ++i) {
@@ -222,14 +222,16 @@ void CONTROL::All()
 	graze_flag = false;
 	item_flag = false;
 
-	//描画領域を指定
-	SetDrawArea(MARGIN, MARGIN, MARGIN + 380, MARGIN + 460);
 
 	//背景クラスのAll関数実行
 	back->All();
 
+	//描画領域を指定
+	SetDrawArea(MARGIN, MARGIN, MARGIN + 380, MARGIN + 460);
+
 	//プレイヤークラスのAll関数実行
 	player->All();
+
 
 	//プレイヤーショットサウンドフラグチェック
 	if (player->GetShotSound()) {
@@ -252,6 +254,7 @@ void CONTROL::All()
 		}
 		//敵との当たり判定
 		EnemyCollisionAll();
+		CollisionEnemy();
 	}
 	else {
 		//	if (1800 <= g_count) {
@@ -261,6 +264,7 @@ void CONTROL::All()
 		}
 		//ボスとの当たり判定
 		BossCollisionAll();
+		CollisionBoss();
 		//	}
 	}
 
@@ -344,7 +348,6 @@ void CONTROL::SoundAll()
 
 void CONTROL::CollisionAll()
 {
-	CollisionEnemy();
 
 	CollisionItem();
 
@@ -390,6 +393,81 @@ void CONTROL::CollisionEnemy()
 					item[z]->SetFlag(ex, ey, enemy[s]->GetItem());
 					break;
 				}
+			}
+		}
+	}
+}
+
+void CONTROL::CollisionBoss()
+{
+	double px;
+	double py;
+	double bx;
+	double by;
+	double ix;
+	double iy;
+
+	int bhp = 0;
+
+	//出すアイテム数
+	int itemnum = 0;
+
+	//操作キャラの弾と敵との当たり判定
+	//プレイヤーのショットとボスとの当たり判定
+	for (int i = 0; i < PSHOT_NUM; ++i) {
+
+//		if (player->GetShotPosition(i, &px, &py)) {
+		if (!player->GetShotPosition(i, &px, &py)) {
+			continue;
+		}
+
+		boss->GetPosition(&bx, &by);
+
+		//当たり判定
+//		if (CircleCollision(PSHOT_COLLISION, BOSS_COLLISION, px, bx, py, by)) {
+		if (CircleCollision(PSHOT_COLLISION, BOSS_COLLISION, px, bx, py, by)) {
+			continue;
+		}
+
+		//当たっていれば、hpを減らす
+		bhp = boss->HpSet(1);
+		//当たった弾のフラグを戻す
+		player->SetShotFlag(i, false);
+		//得点を加える
+		score->SetScore(CURRENT_SCORE, 10);
+
+		//もしボスのHPが0以下なら
+//		if (bhp <= 0) {
+		if (bhp > 0) {
+			continue;
+		}
+
+		//フラグを戻す
+		boss->SetFlag(false);
+		//消滅エフェクトを出す
+		EnemyDeadEffect(bx, by);
+		//消滅音を鳴らす
+		edead_flag = true;
+		//さらに得点を加える
+		score->SetScore(CURRENT_SCORE, 10000);
+
+		//アイテムを出す。
+		for (int z = 0; z < ITEM_NUM; ++z) {
+
+//			if (!item[z]->GetFlag()) {
+			if (item[z]->GetFlag()) {
+				continue;
+			}
+
+			//アイテムの初期座標をばらけさせる。
+			ix = (rand() % 100 - 51) + bx;
+			iy = (rand() % 100 - 51) + by;
+			item[z]->SetFlag(ix, iy, rand() % 2);
+			++itemnum;
+
+			//10個出したらループを抜ける
+			if (itemnum == 10) {
+				break;
 			}
 		}
 	}
@@ -601,6 +679,19 @@ void CONTROL::GetPlayerPosition(
 	*y = tempy;
 }
 
+void CONTROL::GetBossPosition(
+	double*	x,
+	double*	y
+)
+{
+	double bx, by;
+
+	boss->GetPosition(&bx, &by);
+
+	*x = bx;
+	*y = by;
+}
+
 bool CONTROL::GetEnemyPosition(
 	int		index,
 	double*	x,
@@ -623,6 +714,10 @@ bool CONTROL::GetEnemyPosition(
 	return true;
 }
 
+bool CONTROL::GetBossFlag()
+{
+	return boss->GetFlag();
+}
 
 bool CONTROL::CircleCollision(
 	double c1,
