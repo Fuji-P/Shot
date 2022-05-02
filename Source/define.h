@@ -31,6 +31,7 @@
 #define BALL_SHAKE			15
 #define BALL_INITX			50
 #define BALL_INITY			30
+#define BOSS_HP				500
 
 //当たり判定用半径定義
 #define PLAYER_COLLISION	4
@@ -41,7 +42,7 @@
 #define ESHOT2_COLLISION	2
 #define GRAZE_COLLISION		10
 #define ITEM_COLLISION		16		//アイテムの当たり判定用半径
-#define BOSS_SHOTNUM		200
+#define BOSS_SHOTNUM		300
 #define BOSS_SHAKE			20
 #define BOSS_COLLISION		60
 

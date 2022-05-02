@@ -20,7 +20,7 @@ BOSS::BOSS()
 	raise2 = 1;
 	angle = 0;
 	move_pattern = 0;
-	shot_pattern = 3;
+	shot_pattern = 0;
 
 	movex = 0;
 	movey = 180;
@@ -31,12 +31,15 @@ BOSS::BOSS()
 	count = 0;
 	temp_scount = 0;
 
-	hp = 500;
+	hp = BOSS_HP;
 
 	wait = false;
 	damageflag = false;
 	shotflag = false;
 	s_shot = false;
+
+	//Å‰‚Ífalse‚Éİ’è
+	no_damage = false;
 
 	//‰æ‘œ“Ç‚İ‚İ
 	gh_face[0] = LoadGraph("boss.png");
@@ -87,6 +90,9 @@ void BOSS::Move()
 			break;
 		case 3:
 			MovePattern3();
+			break;
+		case 4:
+			MoveToDefault();
 			break;
 	}
 }
@@ -195,6 +201,36 @@ void BOSS::MoveInit(
 
 	p3_state = state;
 }
+
+//’èˆÊ’u‚É–ß‚é
+void BOSS::MoveToDefault()
+{
+
+	double temp;
+
+	angle += 2;
+
+	temp = sin(angle * M_PI / 180);
+
+	x = prev_x + temp * movex;
+	y = prev_y + temp * movey;
+
+	//w’è‚µ‚½ˆÊ’u‚Ü‚ÅˆÚ“®‚µ‚½‚ç
+	if (angle == 90) {
+
+		//Ÿ‚ÌˆÚ“®•ƒVƒ‡ƒbƒgƒpƒ^[ƒ“‚É•ÏX
+		SetMovePattern(prev_move_pattern + 1);
+		SetShotPattern(prev_shot_pattern + 1);
+		//–³“Gƒtƒ‰ƒO‚ğ–ß‚·
+		no_damage = false;
+
+		//ˆÚ“®ƒpƒ^[ƒ“‚ª‚R‚È‚ç
+		if (move_pattern == 3)
+			MoveInit(200, 160, 2);
+	}
+
+}
+
 void BOSS::Draw()
 {
 	//’e‚©‚çÅ‰‚É•`‰æ
@@ -218,26 +254,18 @@ void BOSS::Draw()
 
 void BOSS::Shot()
 {
-	//‰½”­”­Ë‚µ‚½‚©
-	int num = 0;
-	//‹ó‚¢‚Ä‚é’e‚Ì“Y‚¦š
-	int index;
-
-	//scount‚ğ–ß‚·‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒO
-	bool scflag = false;
-
-	CONTROL& control = CONTROL::GetInstance();
-
-	double px;
-	double py;
-	static double trad;
 
 	if (damageflag) {
 		return;
 	}
 
+	double px;
+	double py;
+
+	CONTROL& control = CONTROL::GetInstance();
 	control.GetPlayerPosition(&px, &py);
 
+	static double trad;
 	if (scount == 0) {
 		trad = atan2(py - y, px - x);
 	}
@@ -249,136 +277,205 @@ void BOSS::Shot()
 	switch (shot_pattern) {
 
 		case 0:
-//			if (scount % 5 == 0 && scount <= 15) {
-			if (scount % 10 != 0 || scount > 30) {
-				break;
-			}
-
-			while ((index = ShotSearch()) != -1) {
-				shot[index].gh = gh_shot[1];
-				shot[index].pattern = 0;
-				shot[index].speed = 3;
-				shot[index].type = 2;
-
-				if (num == 0) {
-					shot[index].rad = trad - (10 * M_PI / 180);
-				}
-				else if (num == 1) {
-					shot[index].rad = trad - (5 * M_PI / 180);
-				}
-				else if (num == 2) {
-					shot[index].rad = trad;
-				}
-				else if (num == 3) {
-					shot[index].rad = trad + (5 * M_PI / 180);
-				}
-				else if (num == 4) {
-					shot[index].rad = trad + (10 * M_PI / 180);
-				}
-
-				++num;
-
-				s_shot = true;
-
-				if (num == 5) {
-					break;
-				}
-			}
+			ShotPattern0(trad);
 			break;
 
 		case 1:
-//			if (scount % 5 == 0) {
-			if (scount % 10 != 0) {
-				break;
-			}
-			if ((index = ShotSearch()) != -1) {
-				shot[index].gh = gh_shot[2];
-//				shot[index].speed = 4;
-				shot[index].speed = 2;
-				shot[index].rad = atan2(py - y, px - x) + (rand() % 41 - 20) * M_PI / 180;
-				shot[index].pattern = 1;
-				shot[index].type = 3;
-				s_shot = true;
-			}
+			ShotPattern1(px, py);
 			break;
 
 		case 2:
-//			if (scount % 10 == 0) {
-			if (scount % 20 != 0) {
-				break;
-			}
-			trad = atan2(py - y, px - x);
-			while ((index = ShotSearch()) != -1) {
-				shot[index].gh = gh_shot[0];
-//				shot[index].speed = 5;
-				shot[index].speed = 2.5;
-				shot[index].rad = trad + num * ((360 / 20) * M_PI / 180);
-				shot[index].pattern = 2;
-				shot[index].type = 1;
-				++num;
-				if (num == 20) {
-					break;
-				}
-				s_shot = true;
-			}
+			ShotPattern2(px, py, trad);
 			break;
 
 		case 3:
-//			if (scount % 15 == 0) {
-			if (scount % 30 == 0) {
-				while ((index = ShotSearch()) != -1) {
-					shot[index].gh = gh_shot[0];
-//					shot[index].speed = 3;
-					shot[index].speed = 1.5;
-					shot[index].pattern = 3;
-					shot[index].rad = ((360 / 20) * M_PI / 180) * num + ((scount / 15) * 0.08);
-					shot[index].type = 1;
+			ShotPattern3(px, py);
+			break;
 
-					++num;
-
-					if (num == 20) {
-						break;
-					}
-					s_shot = true;
-				}
-			}
-
-			num = 0;
-
-//			if (scount % 5 == 0 && temp_scount <= scount) {
-			if (scount % 10 == 0 && temp_scount <= scount) {
-				while ((index = ShotSearch()) != -1) {
-					shot[index].gh = gh_shot[1];
-//					shot[index].speed = 6;
-					shot[index].speed = 3;
-					shot[index].pattern = 3;
-					shot[index].type = 2;
-
-					if (num == 0) {
-						shot[index].x = x - 50;
-						shot[index].rad = atan2(py - y, px - (x - 50));
-					}
-					else if (num == 1) {
-						shot[index].x = x + 50;
-						shot[index].rad = atan2(py - y, px - (x + 50));
-					}
-
-					++num;
-
-					if (num == 2) {
-
-						//5”­•ª‘Å‚¿I‚í‚Á‚½‚çA60ƒ‹[ƒv(ˆê•bŠÔ)’â~
-						if (temp_scount + 40 == scount) {
-							temp_scount += 120;
-						}
-						break;
-					}
-
-					s_shot = true;
-				}
-			}
+		default:
+			//‰½‚à‚µ‚È‚¢
 			break;
 	}
+	ShotMove();
+}
+
+void BOSS::ShotPattern0(
+	double	trad
+)
+{
+
+	//	if (scount % 5 == 0 && scount <= 15) {
+	if (scount % 10 != 0 || scount > 30) {
+		return;
+	}
+
+	//‰½”­”­Ë‚µ‚½‚©
+	int num = 0;
+
+	//‹ó‚¢‚Ä‚é’e‚Ì“Y‚¦š
+	int index = 0;
+
+	while ((index = ShotSearch()) != -1) {
+		shot[index].gh = gh_shot[1];
+		shot[index].pattern = 0;
+		shot[index].speed = 3;
+		shot[index].type = 2;
+
+		if (num == 0) {
+			shot[index].rad = trad - (10 * M_PI / 180);
+		}
+		else if (num == 1) {
+			shot[index].rad = trad - (5 * M_PI / 180);
+		}
+		else if (num == 2) {
+			shot[index].rad = trad;
+		}
+		else if (num == 3) {
+			shot[index].rad = trad + (5 * M_PI / 180);
+		}
+		else if (num == 4) {
+			shot[index].rad = trad + (10 * M_PI / 180);
+		}
+
+		++num;
+
+		s_shot = true;
+
+		if (num == 5) {
+			break;
+		}
+	}
+}
+
+void BOSS::ShotPattern1(
+	double	px,
+	double	py
+)
+{
+	//	if (scount % 5 == 0) {
+	if (scount % 10 != 0) {
+		return;
+	}
+
+	//‹ó‚¢‚Ä‚é’e‚Ì“Y‚¦š
+	int index = 0;
+
+	//	if ((index = ShotSearch()) != -1) {
+	if ((index = ShotSearch()) == -1) {
+		return;
+	}
+	shot[index].gh = gh_shot[2];
+//	shot[index].speed = 4;
+	shot[index].speed = 2;
+	shot[index].rad = atan2(py - y, px - x) + (rand() % 41 - 20) * M_PI / 180;
+	shot[index].pattern = 1;
+	shot[index].type = 3;
+	s_shot = true;
+}
+
+void BOSS::ShotPattern2(
+	double	px,
+	double	py,
+	double	trad
+)
+{
+	//	if (scount % 10 == 0) {
+	if (scount % 20 != 0) {
+		return;;
+	}
+
+	//‰½”­”­Ë‚µ‚½‚©
+	int num = 0;
+
+	//‹ó‚¢‚Ä‚é’e‚Ì“Y‚¦š
+	int index = 0;
+
+	trad = atan2(py - y, px - x);
+	while ((index = ShotSearch()) != -1) {
+		shot[index].gh = gh_shot[0];
+		//				shot[index].speed = 5;
+		shot[index].speed = 2.5;
+		shot[index].rad = trad + num * ((360 / 20) * M_PI / 180);
+		shot[index].pattern = 2;
+		shot[index].type = 1;
+		++num;
+		if (num == 20) {
+			break;
+		}
+		s_shot = true;
+	}
+}
+
+void BOSS::ShotPattern3(
+	double	px,
+	double	py
+)
+{
+	//‰½”­”­Ë‚µ‚½‚©
+	int num = 0;
+
+	//‹ó‚¢‚Ä‚é’e‚Ì“Y‚¦š
+	int index = 0;
+
+	//	if (scount % 15 == 0) {
+	if (scount % 30 == 0) {
+		while ((index = ShotSearch()) != -1) {
+			shot[index].gh = gh_shot[0];
+			//					shot[index].speed = 3;
+			shot[index].speed = 1.5;
+			shot[index].pattern = 3;
+			shot[index].rad = ((360 / 20) * M_PI / 180) * num + ((scount / 30) * 0.08);
+			shot[index].type = 1;
+
+			++num;
+
+			if (num == 20) {
+				break;
+			}
+			s_shot = true;
+		}
+	}
+
+	num = 0;
+
+	//	if (scount % 5 == 0 && temp_scount <= scount) {
+	if (scount % 10 == 0 && temp_scount <= scount) {
+		while ((index = ShotSearch()) != -1) {
+			shot[index].gh = gh_shot[1];
+			//					shot[index].speed = 6;
+			shot[index].speed = 3;
+			shot[index].pattern = 3;
+			shot[index].type = 2;
+
+			if (num == 0) {
+				shot[index].x = x - 50;
+				shot[index].rad = atan2(py - y, px - (x - 50));
+			}
+			else if (num == 1) {
+				shot[index].x = x + 50;
+				shot[index].rad = atan2(py - y, px - (x + 50));
+			}
+
+			++num;
+
+			if (num == 2) {
+
+				//5”­•ª‘Å‚¿I‚í‚Á‚½‚çA60ƒ‹[ƒv(ˆê•bŠÔ)’â~
+				if (temp_scount + 40 == scount) {
+					temp_scount += 120;
+				}
+				break;
+			}
+
+			s_shot = true;
+		}
+	}
+}
+
+void BOSS::ShotMove()
+{
+	//scount‚ğ–ß‚·‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒO
+	bool scflag = false;
 
 	for (int i = 0; i < BOSS_SHOTNUM; ++i) {
 		if (!shot[i].flag) {
@@ -386,22 +483,22 @@ void BOSS::Shot()
 		}
 		switch (shot[i].pattern) {
 
-			case 0:
-				shot[i].x += shot[i].speed * cos(shot[i].rad);
-				shot[i].y += shot[i].speed * sin(shot[i].rad);
+		case 0:
+			shot[i].x += shot[i].speed * cos(shot[i].rad);
+			shot[i].y += shot[i].speed * sin(shot[i].rad);
 
-				if (scflag == false && scount == 80) {
-					scflag = true;
-				}
+			if (scflag == false && scount == 80) {
+				scflag = true;
+			}
 
-				break;
+			break;
 
-			case 1:
-			case 2:
-			case 3:
-				shot[i].x += shot[i].speed * cos(shot[i].rad);
-				shot[i].y += shot[i].speed * sin(shot[i].rad);
-				break;
+		case 1:
+		case 2:
+		case 3:
+			shot[i].x += shot[i].speed * cos(shot[i].rad);
+			shot[i].y += shot[i].speed * sin(shot[i].rad);
+			break;
 		}
 
 		//’e‚ª‚Í‚İo‚Ä‚½‚çƒtƒ‰ƒO‚ğ–ß‚·
@@ -439,6 +536,25 @@ int BOSS::ShotSearch()
 
 	return i;
 }
+
+void BOSS::SetDamageSetting()
+{
+
+	prev_x = x;
+	prev_y = y;
+
+	movex = 200 - x;
+	movey = 80 - y;
+
+	angle = 0;
+
+	no_damage = true;
+
+	SetMovePattern(4);
+	SetShotPattern(4);
+
+}
+
 void BOSS::GetPosition(
 	double* x,
 	double* y
@@ -448,6 +564,7 @@ void BOSS::GetPosition(
 	*y = this->y;
 
 }
+
 void BOSS::SetFlag(
 	bool	flag
 )
@@ -461,6 +578,24 @@ void BOSS::SetShotFlag(
 )
 {
 	shot[index].flag = flag;
+}
+
+void BOSS::SetMovePattern(
+	int		pattern
+)
+{
+	prev_move_pattern = move_pattern;
+	move_pattern = pattern;
+}
+
+void BOSS::SetShotPattern(
+	int		pattern
+)
+{
+
+	prev_shot_pattern = shot_pattern;
+	shot_pattern = pattern;
+
 }
 
 void BOSS::SetGrazeFlag(
@@ -506,6 +641,11 @@ bool BOSS::GetFlag()
 	return flag;
 }
 
+bool BOSS::GetNodamageFlag()
+{
+	return no_damage;
+}
+
 bool BOSS::ShotOutCheck(
 	int	i
 )
@@ -523,7 +663,14 @@ int BOSS::HpSet(
 	int damage
 )
 {
+	prev_hp = hp;
 	hp -= damage;
 
 	return hp;
+}
+
+int BOSS::GetPrevHp()
+{
+	return prev_hp;
+
 }

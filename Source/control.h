@@ -54,6 +54,12 @@ private:
 	void CollisionAll();
 	void CollisionEnemy();
 	void CollisionBoss();
+	void DamageBoss(
+		double	bx,
+		double	by,
+		int		MaxScore,
+		int		MaxItemNum
+	);
 	void EnemyCollisionAll();
 	void BossCollisionAll();
 	void CollisionItem();

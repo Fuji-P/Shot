@@ -400,17 +400,17 @@ void CONTROL::CollisionEnemy()
 
 void CONTROL::CollisionBoss()
 {
+	//まず無敵フラグがたってないかをチェック。
+//	if (!boss.GetNodamageFlag()) {
+	if (boss->GetNodamageFlag()) {
+		return;
+	}
 	double px;
 	double py;
 	double bx;
 	double by;
-	double ix;
-	double iy;
 
 	int bhp = 0;
-
-	//出すアイテム数
-	int itemnum = 0;
 
 	//操作キャラの弾と敵との当たり判定
 	//プレイヤーのショットとボスとの当たり判定
@@ -436,39 +436,66 @@ void CONTROL::CollisionBoss()
 		//得点を加える
 		score->SetScore(CURRENT_SCORE, 10);
 
+		char buf[100];
+		sprintf(buf, "%d", bhp);
+		SetMainWindowText(buf);
+
+		//ボスの前回HPがHPが2/3以上で、現HPが2/3以下なら
+		if (BOSS_HP * 2 / 3 >= bhp && boss->GetPrevHp() > BOSS_HP * 2 / 3) {
+			DamageBoss(bx, by, 1000, 5);
+			boss->SetDamageSetting();
+		}
+		else if (BOSS_HP / 3 >= bhp && boss->GetPrevHp() > BOSS_HP / 3) {
+			DamageBoss(bx, by, 1000, 5);
+			boss->SetDamageSetting();
+		}
+
 		//もしボスのHPが0以下なら
-//		if (bhp <= 0) {
-		if (bhp > 0) {
+		else if (bhp <= 0) {
+			//フラグを戻す
+			boss->SetFlag(false);
+			DamageBoss(bx, by, 10000, 10);
+		}
+	}
+}
+
+void CONTROL::DamageBoss(
+	double	bx,
+	double	by,
+	int		MaxScore,
+	int		MaxItemNum
+)
+{
+	double ix;
+	double iy;
+
+	//出すアイテム数
+	int itemnum = 0;
+
+	//消滅エフェクトを出す
+	EnemyDeadEffect(bx, by);
+	//消滅音を鳴らす
+	edead_flag = true;
+	//さらに得点を加える
+	score->SetScore(CURRENT_SCORE, MaxScore);
+
+	//アイテムを出す。
+	for (int z = 0; z < ITEM_NUM; ++z) {
+
+		//			if (!item[z]->GetFlag()) {
+		if (item[z]->GetFlag()) {
 			continue;
 		}
 
-		//フラグを戻す
-		boss->SetFlag(false);
-		//消滅エフェクトを出す
-		EnemyDeadEffect(bx, by);
-		//消滅音を鳴らす
-		edead_flag = true;
-		//さらに得点を加える
-		score->SetScore(CURRENT_SCORE, 10000);
+		//アイテムの初期座標をばらけさせる。
+		ix = (rand() % 100 - 51) + bx;
+		iy = (rand() % 100 - 51) + by;
+		item[z]->SetFlag(ix, iy, rand() % 2);
+		++itemnum;
 
-		//アイテムを出す。
-		for (int z = 0; z < ITEM_NUM; ++z) {
-
-//			if (!item[z]->GetFlag()) {
-			if (item[z]->GetFlag()) {
-				continue;
-			}
-
-			//アイテムの初期座標をばらけさせる。
-			ix = (rand() % 100 - 51) + bx;
-			iy = (rand() % 100 - 51) + by;
-			item[z]->SetFlag(ix, iy, rand() % 2);
-			++itemnum;
-
-			//10個出したらループを抜ける
-			if (itemnum == 10) {
-				break;
-			}
+		//10個出したらループを抜ける
+		if (itemnum == MaxItemNum) {
+			break;
 		}
 	}
 }
